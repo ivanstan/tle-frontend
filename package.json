@@ -1,7 +1,8 @@
 {
-  "name": "tle-frontend",
+  "name": "ivanstan/tle-frontend",
   "version": "0.1.0",
   "private": true,
+  "license": "proprietary",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.57",

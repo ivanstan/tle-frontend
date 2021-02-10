@@ -2,29 +2,17 @@ import React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { Home } from "./pages/Home";
 import { Docs } from "./pages/Docs";
+import { Navigation } from "./components/Navigation";
 
 function App() {
   return (
-    <>
-      <nav className="navbar bg-dark">
-        <a className="navbar-brand" href="#!">TLE API</a>
-      </nav>
-
       <Router>
+        <Navigation/>
         <Switch>
           <Route path="/" exact component={Home}/>
           <Route path="/docs" exact component={Docs}/>
         </Switch>
       </Router>
-
-      <div className="container bg-white my-3">
-        <div className="row">
-          <div className="col-12">
-            bla
-          </div>
-        </div>
-      </div>
-    </>
   );
 }
 
