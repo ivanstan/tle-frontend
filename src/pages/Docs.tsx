@@ -10,6 +10,7 @@ export class Docs extends React.Component {
           nativeScrollbars: false,
           disableSearch: true,
           expandResponses: "200,201",
+          hideDownloadButton: true,
           theme: {
             colors: {
               success: { main: '#4aa564', },
