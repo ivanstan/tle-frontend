@@ -5,12 +5,19 @@ import { AppBar, Button, Toolbar, Typography } from "@material-ui/core";
 export function Navigation(props: any) {
   return (
     <HideOnScroll {...props}>
-      <AppBar position="static">
+      <AppBar position="static" elevation={0}>
         <Toolbar>
-          <Button href={'/'}>
+          <Button href={'#/'}>
             <Typography variant="h6">
               TLE API
             </Typography>
+          </Button>
+
+          <Button href={'#/'}>
+            Index
+          </Button>
+          <Button href={'#docs'}>
+            Documentation
           </Button>
         </Toolbar>
       </AppBar>

@@ -2,16 +2,18 @@ import React, { ChangeEvent } from "react";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { TleProvider } from "../TleProvider";
+import { TleProvider } from "../Tle/TleProvider";
+import { Tle } from "../Tle/Tle";
+
+
+export interface TleSelectPropsInterface {
+  value: Tle | null;
+  onChange: Function
+}
 
 export class TleSelect extends React.Component<any, any> {
+
   private service: TleProvider;
-
-  constructor(props: any) {
-    super(props);
-
-    this.service = new TleProvider();
-  }
 
   public readonly state = {
     open: false,
@@ -20,6 +22,14 @@ export class TleSelect extends React.Component<any, any> {
     value: null,
     inputValue: null,
   };
+
+  constructor(props: any) {
+    super(props);
+
+    this.state.value = props.value;
+
+    this.service = new TleProvider();
+  }
 
   public async query() {
     const { inputValue } = this.state;
@@ -33,13 +43,18 @@ export class TleSelect extends React.Component<any, any> {
 
   render() {
     const { open, options, value, inputValue, loading } = this.state;
+    const { onChange } = this.props;
 
     return <Autocomplete
       value={value}
       onChange={(event, newValue: any) => {
         this.setState({ value: newValue });
+
+        if (onChange !== null && typeof onChange === 'function') {
+          onChange(newValue);
+        }
       }}
-      style={{ width: 300 }}
+      style={{ width: 400, margin: 'auto' }}
       open={open}
       onOpen={() => {
         if (options.length === 0) {

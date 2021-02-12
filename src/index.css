@@ -1,5 +1,7 @@
 html {
     height: 100%;
+    overflow: -moz-scrollbars-vertical;
+    overflow-y: scroll;
 }
 
 body {
@@ -8,12 +10,29 @@ body {
     'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #526070;
     height: 100%;
 }
 
-code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+.slide-container {
+    height: calc(100% * 2 - 64px);
+}
+
+.slide {
+    min-height: 100vh;
+}
+
+.first-slide {
+    min-height: calc(100vh - 64px);
+}
+
+.code {
+    font-family: 'Anonymous Pro', monospace;
+    background: #f1f1f1;
+    padding: 20px 40px;
+}
+
+#root {
+    height: 100%;
 }
 
 .bg-darker {
@@ -26,4 +45,8 @@ code {
 
 .bg-white {
     background: #fff;
+}
+
+#home-page {
+    min-height: calc(100% - 64px);
 }
