@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-DEPLOY_PATH=/home/glutenfr/projects/dev.ivanstanojevic.me
+DEPLOY_PATH=/home/glutenfr/projects/tle.ivanstanojevic.me/shared/public
 HOST=ivanstanojevic.me
 USER=glutenfr
 PORT=2233
