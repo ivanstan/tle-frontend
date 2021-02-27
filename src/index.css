@@ -60,3 +60,12 @@ body {
 #home-page {
     min-height: calc(100% - 64px);
 }
+
+.tle-display .element {
+    /*border: 2px solid transparent;*/
+    border-radius: 8px;
+}
+
+.tle-display .element:hover {
+    /*border: 2px solid red;*/
+}
