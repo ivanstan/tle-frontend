@@ -1,23 +1,52 @@
 import React from "react";
 import { TleSelect } from "../components/TleSelect";
-import { Tle } from "../Tle/Tle";
 import { TleDisplay } from "../components/TleDisplay";
+import { Tle, TleProvider } from "tle-client";
 
 interface HomeStateInterface {
-  data: Tle|null;
+  data: Tle | null;
 }
 
 export class Home extends React.Component<any, HomeStateInterface> {
+
+  private provider: TleProvider;
+
+  constructor(props: any) {
+    super(props);
+
+    this.provider = new TleProvider();
+  }
+
 
   readonly state: HomeStateInterface = {
     data: null,
   };
 
-  onChange = (data: Tle) => {
+  componentDidMount() {
+    const { id } = this.props.match.params;
+
+    if (id) {
+      this.provider.get(id).then(tle => {
+        this.setState({ data: tle });
+        window.scroll({
+          top: window.innerHeight + 64,
+          behavior: 'smooth'
+        });
+      });
+    }
+  }
+
+  onChange = (tle: any | null) => {
+    if (tle === null) {
+      this.props.history.push('/');
+    } else {
+      this.props.history.push('/tle/' + tle.satelliteId);
+    }
+
     this.setState({
-      data: data
+      data: tle
     }, () => {
-      if (data) {
+      if (tle) {
         window.scroll({
           top: window.innerHeight + 64,
           behavior: 'smooth'
@@ -52,10 +81,10 @@ export class Home extends React.Component<any, HomeStateInterface> {
               >Definition of Two-line Element Set Coordinate System</a>.
               </p>
               <p className={"text-center"}>Search for satellite of your interest</p>
-              <TleSelect onChange={this.onChange}/>
+              <TleSelect onChange={this.onChange} value={data}/>
             </div>
 
-            {data && <div className="slide">
+            {data?.name && <div className="slide">
               <h2 className="pb-4">{data.name}</h2>
               <p className="pb-2">Latest two line element data for selected satellite</p>
 

@@ -27,6 +27,7 @@ function App() {
         <Navigation/>
         <Switch>
           <Route path="/" exact component={Home}/>
+          <Route path="/tle/:id" exact component={Home}/>
           <Route path="/docs" exact component={Docs}/>
         </Switch>
       </Router>

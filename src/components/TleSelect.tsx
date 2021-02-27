@@ -2,9 +2,7 @@ import React, { ChangeEvent } from "react";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { TleProvider } from "../Tle/TleProvider";
-import { Tle } from "../Tle/Tle";
-
+import { Tle, TleProvider } from "tle-client";
 
 export interface TleSelectPropsInterface {
   value: Tle | null;
@@ -13,7 +11,7 @@ export interface TleSelectPropsInterface {
 
 export class TleSelect extends React.Component<any, any> {
 
-  private service: TleProvider;
+  private provider: TleProvider;
 
   public readonly state = {
     open: false,
@@ -27,16 +25,29 @@ export class TleSelect extends React.Component<any, any> {
     super(props);
 
     this.state.value = props.value;
+    this.state.inputValue = props.value?.name;
 
-    this.service = new TleProvider();
+    this.provider = new TleProvider();
+  }
+
+  static getDerivedStateFromProps(props: TleSelectPropsInterface, state: any) {
+
+    if (props.value === null) {
+      return null;
+    }
+
+    return {
+      value: props.value,
+      inputValue: props.value.name,
+    };
   }
 
   public async query() {
     const { inputValue } = this.state;
 
-    this.service.search(inputValue)
-      .then(data => {
-        this.setState({ options: data.hasOwnProperty('member') ? data['member'] : [], loading: false });
+    this.provider.search(inputValue)
+      .then((data: Tle[]) => {
+        this.setState({ options: data, loading: false });
       })
       .catch(() => this.setState({ options: [], loading: false }));
   }

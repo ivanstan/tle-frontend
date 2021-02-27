@@ -24,6 +24,7 @@
     "react-scripts": "4.0.2",
     "redoc": "^2.0.0-rc.48",
     "styled-components": "^5.2.1",
+    "tle-client": "ivanstan/tle.js",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
