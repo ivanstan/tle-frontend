@@ -12062,7 +12062,7 @@ tiny-warning@^1.0.0, tiny-warning@^1.0.2, tiny-warning@^1.0.3:
 
 tle-client@ivanstan/tle.js:
   version "1.0.2"
-  resolved "https://codeload.github.com/ivanstan/tle.js/tar.gz/5d5a347809589d799e4b11dc7ebb0756db0818b4"
+  resolved "https://codeload.github.com/ivanstan/tle.js/tar.gz/1057655740b8b98900b5a0edfc15fd22f0f020e3"
 
 tmpl@1.0.x:
   version "1.0.4"
