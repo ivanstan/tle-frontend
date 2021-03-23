@@ -56,6 +56,8 @@ export class TleSelect extends React.Component<any, any> {
     const { open, options, value, inputValue, loading } = this.state;
     const { onChange } = this.props;
 
+    let width = (window.innerWidth < 500) ? 'auto' : 400;
+
     return <Autocomplete
       value={value}
       onChange={(event, newValue: any) => {
@@ -65,7 +67,7 @@ export class TleSelect extends React.Component<any, any> {
           onChange(newValue);
         }
       }}
-      style={{ width: 400, margin: 'auto' }}
+      style={{ width: width, margin: 'auto' }}
       open={open}
       onOpen={() => {
         if (options.length === 0) {
