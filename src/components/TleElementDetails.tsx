@@ -14,7 +14,6 @@ export class TleElementDetails extends React.Component<any, any> {
 
     return (
       <>
-
         <div className="element-detail">
           <div className="d-flex align-items-center">
             <div style={squareStyle}/>
