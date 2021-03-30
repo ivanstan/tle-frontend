@@ -4,6 +4,7 @@ import { Home } from "./pages/Home";
 import { Docs } from "./pages/Docs";
 import { Navigation } from "./components/Navigation";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { Health } from "./pages/Health";
 
 const theme = createMuiTheme({
   palette: {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" exact component={Home}/>
           <Route path="/tle/:id" exact component={Home}/>
           <Route path="/docs" exact component={Docs}/>
+          <Route path="/health" exact component={Health}/>
         </Switch>
       </Router>
     </ThemeProvider>

@@ -19,6 +19,9 @@ export function Navigation(props: any) {
           <Button href={'#docs'}>
             Documentation
           </Button>
+          <Button href={'#health'}>
+            Health
+          </Button>
         </Toolbar>
       </AppBar>
     </HideOnScroll>
