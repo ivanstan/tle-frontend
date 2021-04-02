@@ -16,6 +16,9 @@ export function Navigation(props: any) {
           <Button href={'#/'}>
             Index
           </Button>
+          <Button href={'#/browse'}>
+            Browse
+          </Button>
           <Button href={'#docs'}>
             Documentation
           </Button>

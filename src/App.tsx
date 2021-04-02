@@ -5,6 +5,7 @@ import { Docs } from "./pages/Docs";
 import { Navigation } from "./components/Navigation";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { Health } from "./pages/Health";
+import { Browse } from "./pages/Browse";
 
 const theme = createMuiTheme({
   palette: {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/operation/record" exact component={Docs}/>
           <Route path="/operation/collection" exact component={Docs}/>
           <Route path="/health" exact component={Health}/>
+          <Route path="/browse" exact component={Browse}/>
         </Switch>
       </Router>
     </ThemeProvider>
