@@ -13,6 +13,25 @@ const columns: GridColDef[] = [
     type: 'string',
     width: 250,
   },
+  {
+    field: 'eccentricity',
+    headerName: 'Eccentricity',
+    type: 'float',
+    width: 250,
+    valueGetter: (params) => {
+      return params.row.extra.eccentricity;
+    },
+    filterable: true
+  },
+  {
+    field: 'inclination',
+    headerName: 'Inclination',
+    type: 'float',
+    width: 250,
+    valueGetter: (params) => {
+      return params.row.extra.inclination;
+    }
+  },
 ];
 
 const TleBrowserWrapper = styled.div`
@@ -31,12 +50,12 @@ export class Browse extends React.Component<any, any> {
     this.provider = new TleProvider();
   }
 
-  public readonly state = {
+  public readonly state: any = {
     data: [],
     total: 0,
     loading: true,
     parameters: {
-
+      extra: 1,
     },
     open: false,
     current: null,
@@ -80,7 +99,10 @@ export class Browse extends React.Component<any, any> {
     let parameters: any = this.state.parameters;
 
     parameters['page-size'] = event.pageSize;
-    parameters['page'] = event.page;
+
+    if (event.page > 0) {
+      parameters['page'] = event.page;
+    }
 
     this.setState({parameters: parameters}, this.collection);
   };
@@ -130,6 +152,8 @@ export class Browse extends React.Component<any, any> {
                   disableColumnMenu={true}
                   onSelectionModelChange={this.handleModelSelectChange}
                   sortingMode={'server'}
+                  sortingOrder={['desc', 'asc']}
+                  disableColumnSelector={true}
         />
         <Drawer anchor={'right'} open={this.state.open} onClose={() => this.toggleDrawer()} BackdropProps={{ invisible: true }}>
           <If condition={this.state.current}>
