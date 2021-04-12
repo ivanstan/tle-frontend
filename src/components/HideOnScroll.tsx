@@ -1,9 +1,10 @@
+import React from 'react';
 import { Slide, useScrollTrigger } from "@material-ui/core";
 import { ReactElementLike } from "prop-types";
 
 interface HideOnScrollPropsInterface {
   children: ReactElementLike,
-  window: Function,
+  window?: Function,
 }
 
 export function HideOnScroll(props: HideOnScrollPropsInterface) {

@@ -155,7 +155,7 @@ export class Browse extends React.Component<any, any> {
                   sortingOrder={['desc', 'asc']}
                   disableColumnSelector={true}
         />
-        <Drawer anchor={'right'} open={this.state.open} onClose={() => this.toggleDrawer()} BackdropProps={{ invisible: true }}>
+        <Drawer variant="persistent" anchor={'right'} open={this.state.open} onClose={() => this.toggleDrawer()} BackdropProps={{ invisible: true }}>
           <If condition={this.state.current}>
             <TleBrowserWrapper>
             <TleBrowser data={this.state.current}/>
