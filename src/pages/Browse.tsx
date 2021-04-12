@@ -6,8 +6,9 @@ import { If } from "react-if";
 import { TleBrowser } from "../components/TleBrowser";
 import styled from "styled-components";
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+
 const Toolbar = styled.div`
-  padding: 10px;
+  padding: 10px 0;
 `;
 
 const DrawerHeader = styled.div`
@@ -152,10 +153,9 @@ export class Browse extends React.Component<any, any> {
 
   render() {
     return (
-      <div style={{height: 'calc(100% - 144px)'}}>
-
+      <div style={{height: 'calc(100% - 144px)', padding: 5}}>
         <Toolbar>
-          <TextField label="Search..." variant="outlined" onChange={this.handleSearchChange}/>
+          <TextField label="Search..." variant="outlined" onChange={this.handleSearchChange} style={{width: 250}}/>
         </Toolbar>
 
         <DataGrid pagination rows={this.state.data}

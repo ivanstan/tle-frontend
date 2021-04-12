@@ -139,7 +139,7 @@ export class TleBrowser extends React.Component<any, any> {
       </div>
 
       <div className={'d-flex pt-1'} style={{fontSize: 12}}>
-        Get daily updates for {data.name} using following API endpoint&nbsp;
+        <span className={"d-none d-md-inline"}>Get daily updates for {data.name} using following API endpoint&nbsp;</span>
         <a
           target="_blank"
           rel="nofollow"
