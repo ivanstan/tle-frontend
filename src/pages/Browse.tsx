@@ -109,7 +109,7 @@ export class Browse extends React.Component<any, any> {
       parameters['page'] = event.page;
     }
 
-    this.setState({parameters: parameters}, this.collection);
+    this.setState({ parameters: parameters }, this.collection);
   };
 
   handleSortModelChange = (event: any) => {
@@ -122,11 +122,11 @@ export class Browse extends React.Component<any, any> {
     parameters['sort'] = event.sortModel[0].field;
     parameters['sort-dir'] = event.sortModel[0].sort;
 
-    this.setState({parameters: parameters}, this.collection);
+    this.setState({ parameters: parameters }, this.collection);
   };
 
   handleModelSelectChange = (event: any) => {
-    this.provider.get(event.selectionModel[0]).then(current => this.setState({current: current}));
+    this.provider.get(event.selectionModel[0]).then(current => this.setState({ current: current }));
 
     this.setState({
       open: true,
@@ -147,44 +147,53 @@ export class Browse extends React.Component<any, any> {
 
       parameters['search'] = value;
 
-      this.setState({parameters: parameters}, this.collection);
+      this.setState({ parameters: parameters }, this.collection);
     }
   }
 
   render() {
     return (
-      <div style={{height: 'calc(100% - 144px)', padding: 5}}>
+      <div style={{ height: 'calc(100% - 144px)', padding: 5 }}>
         <Toolbar>
-          <TextField label="Search..." variant="outlined" onChange={this.handleSearchChange} style={{width: 250}}/>
+          <TextField label="Search..." variant="outlined" onChange={this.handleSearchChange} style={{ width: 250 }}/>
         </Toolbar>
 
-        <DataGrid pagination rows={this.state.data}
-                  loading={this.state.loading}
-                  columns={columns}
-                  pageSize={20}
-                  getRowId={(row) => row.satelliteId}
-                  rowHeight={52}
-                  rowCount={this.state.total}
-                  columnBuffer={8}
-                  density={"standard"}
-                  onPageChange={this.handlePageChange}
-                  onSortModelChange={this.handleSortModelChange}
-                  paginationMode={'server'}
-                  disableColumnMenu={true}
-                  onSelectionModelChange={this.handleModelSelectChange}
-                  sortingMode={'server'}
-                  sortingOrder={['desc', 'asc']}
-                  disableColumnSelector={true}
+        <DataGrid
+          pagination rows={this.state.data}
+          loading={this.state.loading}
+          columns={columns}
+          pageSize={20}
+          getRowId={(row) => row.satelliteId}
+          rowHeight={52}
+          rowCount={this.state.total}
+          columnBuffer={8}
+          density={"standard"}
+          onPageChange={this.handlePageChange}
+          onSortModelChange={this.handleSortModelChange}
+          paginationMode={'server'}
+          disableColumnMenu={true}
+          onSelectionModelChange={this.handleModelSelectChange}
+          sortingMode={'server'}
+          sortingOrder={['desc', 'asc']}
+          disableColumnSelector={true}
         />
-        <Drawer variant="persistent" anchor={'right'} open={this.state.open} onClose={this.toggleDrawer} BackdropProps={{ invisible: true }}>
+
+        <Drawer
+          variant="persistent"
+          anchor={'right'}
+          open={this.state.open}
+          onClose={this.toggleDrawer}
+          BackdropProps={{ invisible: true }}
+        >
           <DrawerHeader>
             <IconButton onClick={this.toggleDrawer}>
-              <ArrowForwardIosIcon />
+              <ArrowForwardIosIcon/>
             </IconButton>
           </DrawerHeader>
+
           <If condition={this.state.current}>
             <TleBrowserWrapper>
-            <TleBrowser data={this.state.current}/>
+              <TleBrowser data={this.state.current}/>
             </TleBrowserWrapper>
           </If>
         </Drawer>
