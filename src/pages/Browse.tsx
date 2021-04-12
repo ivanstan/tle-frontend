@@ -1,10 +1,18 @@
 import React from "react";
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
-import { Drawer } from "@material-ui/core";
+import { Drawer, IconButton, TextField } from '@material-ui/core';
 import { TleProvider } from "tle-client";
 import { If } from "react-if";
 import { TleBrowser } from "../components/TleBrowser";
 import styled from "styled-components";
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+const Toolbar = styled.div`
+  padding: 10px;
+`;
+
+const DrawerHeader = styled.div`
+  padding: 20px;
+`;
 
 const columns: GridColDef[] = [
   {
@@ -73,10 +81,6 @@ export class Browse extends React.Component<any, any> {
 
     let url: string = Browse.URL + '/api/tle';
 
-    // if (query !== null) {
-    //   url += '?search=' + query;
-    // }
-
     const response = await fetch(url + '?' + new URLSearchParams(this.state.parameters).toString());
     const data: any = await response.json();
 
@@ -128,15 +132,32 @@ export class Browse extends React.Component<any, any> {
     })
   }
 
-  toggleDrawer() {
+  toggleDrawer = () => {
     this.setState({
       open: !this.state.open
     })
+  };
+
+  handleSearchChange = (event: any) => {
+    let value = event.target.value.trim();
+
+    if (value !== '') {
+      let parameters: any = this.state.parameters;
+
+      parameters['search'] = value;
+
+      this.setState({parameters: parameters}, this.collection);
+    }
   }
 
   render() {
     return (
-      <div style={{height: 'calc(100% - 64px)'}}>
+      <div style={{height: 'calc(100% - 144px)'}}>
+
+        <Toolbar>
+          <TextField label="Search..." variant="outlined" onChange={this.handleSearchChange}/>
+        </Toolbar>
+
         <DataGrid pagination rows={this.state.data}
                   loading={this.state.loading}
                   columns={columns}
@@ -155,7 +176,12 @@ export class Browse extends React.Component<any, any> {
                   sortingOrder={['desc', 'asc']}
                   disableColumnSelector={true}
         />
-        <Drawer variant="persistent" anchor={'right'} open={this.state.open} onClose={() => this.toggleDrawer()} BackdropProps={{ invisible: true }}>
+        <Drawer variant="persistent" anchor={'right'} open={this.state.open} onClose={this.toggleDrawer} BackdropProps={{ invisible: true }}>
+          <DrawerHeader>
+            <IconButton onClick={this.toggleDrawer}>
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </DrawerHeader>
           <If condition={this.state.current}>
             <TleBrowserWrapper>
             <TleBrowser data={this.state.current}/>
