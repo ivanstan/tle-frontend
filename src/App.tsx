@@ -6,6 +6,7 @@ import { Navigation } from "./components/Navigation";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { Health } from "./pages/Health";
 import { Browse } from "./pages/Browse";
+import Map from "./pages/Map";
 import * as Sentry from "@sentry/react";
 
 const theme = createMuiTheme({
@@ -39,6 +40,7 @@ function App() {
             <Route path="/operation/collection" exact component={Docs}/>
             <Route path="/health" exact component={Health}/>
             <Route path="/browse" exact component={Browse}/>
+            <Route path="/map" exact component={Map}/>
           </Switch>
         </Router>
       </ThemeProvider>
