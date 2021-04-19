@@ -1,11 +1,12 @@
 import React from "react";
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
-import { Drawer, IconButton, TextField } from '@material-ui/core';
+import { Drawer, IconButton, InputAdornment, MenuItem, Select, TextField } from '@material-ui/core';
 import { TleProvider } from "tle-client";
 import { If } from "react-if";
 import { TleBrowser } from "../components/TleBrowser";
 import styled from "styled-components";
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import SearchIcon from '@material-ui/icons/Search';
 
 const Toolbar = styled.div`
   padding: 10px 0;
@@ -15,12 +16,28 @@ const DrawerHeader = styled.div`
   padding: 20px;
 `;
 
+export const RETROGRADE = 'retrograde'
+export const POSIGRADE = 'posigrade'
+
 const columns: GridColDef[] = [
   {
     field: 'name',
     headerName: 'Name',
     type: 'string',
     width: 250,
+    disableColumnMenu: true,
+  },
+  {
+    field: 'inclination',
+    headerName: 'Inclination',
+    type: 'float',
+    width: 250,
+    sortable: true,
+    disableColumnMenu: true,
+    filterable: true,
+    valueGetter: (params) => {
+      return params.row.extra.inclination;
+    }
   },
   {
     field: 'eccentricity',
@@ -30,17 +47,8 @@ const columns: GridColDef[] = [
     valueGetter: (params) => {
       return params.row.extra.eccentricity;
     },
+    disableColumnMenu: true,
     sortable: true
-  },
-  {
-    field: 'inclination',
-    headerName: 'Inclination',
-    type: 'float',
-    width: 250,
-    sortable: true,
-    valueGetter: (params) => {
-      return params.row.extra.inclination;
-    }
   },
 ];
 
@@ -152,11 +160,58 @@ export class Browse extends React.Component<any, any> {
     }
   }
 
+  handleInclinationFilter = (event: any): void => {
+    let value = event.target.value.trim();
+
+    let parameters: any = this.state.parameters;
+
+    if (value === RETROGRADE) {
+      parameters['inclination[gt]'] = 90
+      delete parameters['inclination[lt]']
+    }
+
+    if (value === POSIGRADE) {
+      parameters['inclination[lt]'] = 90
+      delete parameters['inclination[gt]']
+    }
+
+    if (value === '') {
+      delete parameters['inclination[lt]']
+      delete parameters['inclination[gt]']
+    }
+
+    this.setState({ parameters: parameters }, this.collection)
+  };
+
   render() {
     return (
       <div style={{ height: 'calc(100% - 144px)', padding: 5 }}>
         <Toolbar>
-          <TextField label="Search..." variant="outlined" onChange={this.handleSearchChange} style={{ width: 250 }}/>
+          <TextField
+            label="Search..."
+            variant="filled"
+            onChange={this.handleSearchChange}
+            style={{ width: 245 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon/>
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <Select style={{ width: 245, marginLeft: 10 }} variant="filled" onChange={this.handleInclinationFilter}>
+            <MenuItem value={''}>
+              -
+            </MenuItem>
+            <MenuItem value={RETROGRADE}>
+              Retrograde
+            </MenuItem>
+            <MenuItem value={POSIGRADE}>
+              Posigrade
+            </MenuItem>
+          </Select>
         </Toolbar>
 
         <DataGrid
@@ -172,7 +227,7 @@ export class Browse extends React.Component<any, any> {
           onPageChange={this.handlePageChange}
           onSortModelChange={this.handleSortModelChange}
           paginationMode={'server'}
-          disableColumnMenu={true}
+          disableColumnMenu={false}
           onSelectionModelChange={this.handleModelSelectChange}
           sortingMode={'server'}
           sortingOrder={['desc', 'asc']}
