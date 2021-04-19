@@ -30,13 +30,14 @@ const columns: GridColDef[] = [
     valueGetter: (params) => {
       return params.row.extra.eccentricity;
     },
-    filterable: true
+    sortable: true
   },
   {
     field: 'inclination',
     headerName: 'Inclination',
     type: 'float',
     width: 250,
+    sortable: true,
     valueGetter: (params) => {
       return params.row.extra.inclination;
     }
