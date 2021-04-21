@@ -19,6 +19,17 @@ const DrawerHeader = styled.div`
 export const RETROGRADE = 'retrograde'
 export const POSIGRADE = 'posigrade'
 
+const formatTime = (seconds: number) => {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.round(seconds % 60);
+  return [
+    h,
+    m > 9 ? m : (h ? '0' + m : m || '0'),
+    s > 9 ? s : '0' + s
+  ].filter(Boolean).join(':');
+};
+
 const columns: GridColDef[] = [
   {
     field: 'name',
@@ -46,6 +57,17 @@ const columns: GridColDef[] = [
     width: 250,
     valueGetter: (params) => {
       return params.row.extra.eccentricity;
+    },
+    disableColumnMenu: true,
+    sortable: true
+  },
+  {
+    field: 'period',
+    headerName: 'Period',
+    type: 'string',
+    width: 250,
+    valueGetter: (params) => {
+      return formatTime(params.row.extra.period);
     },
     disableColumnMenu: true,
     sortable: true
