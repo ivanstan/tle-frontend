@@ -1,11 +1,16 @@
 import React from "react";
 import { RedocStandalone } from "redoc";
+import { isProduction } from "../util/common";
+
+const PRODUCTION_DOCS = 'https://tle.ivanstanojevic.me/api/tle.json';
+const DEVELOPMENT_DOCS = 'http://127.0.0.1:8000/api/tle.json';
 
 export class Docs extends React.Component {
+
   render() {
     return <>
       <RedocStandalone
-        specUrl="https://tle.ivanstanojevic.me/api/tle.json"
+        specUrl={isProduction() ? PRODUCTION_DOCS : DEVELOPMENT_DOCS}
         options={{
           nativeScrollbars: false,
           disableSearch: true,

@@ -8,6 +8,7 @@ import { Health } from "./pages/Health";
 import { Browse } from "./pages/Browse";
 import Map from "./pages/Map";
 import * as Sentry from "@sentry/react";
+import { isProduction } from "./util/common";
 
 const theme = createMuiTheme({
   palette: {
@@ -24,7 +25,9 @@ const theme = createMuiTheme({
   },
 });
 
-Sentry.init({ dsn: "https://89c7162887474970b4d5e599245910b2@o509872.ingest.sentry.io/5604902" });
+if (isProduction()) {
+  Sentry.init({ dsn: "https://89c7162887474970b4d5e599245910b2@o509872.ingest.sentry.io/5604902" });
+}
 
 function App() {
   return (
