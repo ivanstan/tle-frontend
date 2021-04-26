@@ -58,7 +58,7 @@ export class Home extends React.Component<any, HomeStateInterface> {
   componentDidMount() {
     const { id } = this.props.match.params;
 
-    this.popular.get().then(data => {
+    this.provider.search().then((data: any) => {
       if (data) {
         this.setState({ popular: data });
       }
