@@ -12,7 +12,7 @@ export class Docs extends React.Component {
       <RedocStandalone
         specUrl={isProduction() ? PRODUCTION_DOCS : DEVELOPMENT_DOCS}
         options={{
-          nativeScrollbars: false,
+          nativeScrollbars: true,
           disableSearch: true,
           expandResponses: "200,201",
           hideDownloadButton: true,
