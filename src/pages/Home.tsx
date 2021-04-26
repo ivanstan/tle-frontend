@@ -141,8 +141,8 @@ export class Home extends React.Component<any, HomeStateInterface> {
               <PopularWrapper>
                 {popular.map(item => {
                   return (
-                    <PopularItemWrapper key={item.id}>
-                      <Link  href={'#/tle/' + item.id}>{item.name}</Link>
+                    <PopularItemWrapper key={item.satelliteId}>
+                      <Link  href={'#/tle/' + item.satelliteId}>{item.name}</Link>
                     </PopularItemWrapper>
                   )
                 })}
