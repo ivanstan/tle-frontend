@@ -3,19 +3,18 @@ import TleApi from "../services/TleApi";
 
 export class SatellitePosition extends React.Component<any, any> {
 
-  readonly state = {
+  readonly state: any = {
     satelliteId: null,
-    date: null,
   }
 
   shouldComponentUpdate(nextProps: Readonly<any>, nextState: Readonly<any>, nextContext: any): boolean {
     return this.state.satelliteId !== nextProps.satelliteId;
   }
 
-  static async getDerivedStateFromProps(props: any) {
+  static getDerivedStateFromProps(props: any) {
     return {
+      propagation: props.propagation,
       satelliteId: props.satelliteId,
-      date: await TleApi.predict(props.satelliteId, new Date()),
     }
   }
 

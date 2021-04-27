@@ -8,6 +8,7 @@ import styled from "styled-components";
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import SearchIcon from '@material-ui/icons/Search';
 import { SatellitePosition } from "../components/SatellitePosition";
+import TleApi from "../services/TleApi";
 
 const Toolbar = styled.div`
   padding: 10px 0;
@@ -101,6 +102,7 @@ export class Browse extends React.Component<any, any> {
     orbitValue: '-',
     open: false,
     current: null,
+    propagation: null
   };
 
   componentDidMount() {
@@ -159,7 +161,19 @@ export class Browse extends React.Component<any, any> {
   };
 
   handleModelSelectChange = (event: any) => {
-    this.provider.get(event.selectionModel[0]).then(current => this.setState({ current: current }));
+    this.provider.get(event.selectionModel[0]).then(async (current) =>  {
+      const date = new Date()
+
+      let propagation = null
+      if (current) {
+        propagation = await TleApi.predict(current.satelliteId, date)
+      }
+
+      this.setState({
+        propagation: propagation,
+        current: current
+      })
+    })
 
     this.setState({
       open: true,
@@ -279,7 +293,7 @@ export class Browse extends React.Component<any, any> {
           <If condition={this.state.current}>
             <TleBrowserWrapper>
               <TleBrowser data={this.state.current}/>
-              <SatellitePosition satelliteId={this.state.current !== null ? this.state.current.satelliteId : null}/>
+              <SatellitePosition satelliteId={this.state.current?.satelliteId} propagation={this.state.propagation}/>
             </TleBrowserWrapper>
           </If>
         </Drawer>
