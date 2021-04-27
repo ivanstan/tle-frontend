@@ -7,6 +7,7 @@ import { TleBrowser } from "../components/TleBrowser";
 import styled from "styled-components";
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import SearchIcon from '@material-ui/icons/Search';
+import { SatellitePosition } from "../components/SatellitePosition";
 
 const Toolbar = styled.div`
   padding: 10px 0;
@@ -97,6 +98,7 @@ export class Browse extends React.Component<any, any> {
     parameters: {
       extra: 1,
     },
+    orbitValue: '-',
     open: false,
     current: null,
   };
@@ -202,10 +204,15 @@ export class Browse extends React.Component<any, any> {
       delete parameters['inclination[gt]']
     }
 
-    this.setState({ parameters: parameters }, this.collection)
+    this.setState({
+      orbitValue: value,
+      parameters: parameters
+    }, this.collection)
   };
 
   render() {
+    const { orbitValue } = this.state;
+
     return (
       <div style={{ height: 'calc(100% - 144px)', padding: 5 }}>
         <Toolbar>
@@ -223,8 +230,8 @@ export class Browse extends React.Component<any, any> {
             }}
           />
 
-          <Select style={{ width: 245, marginLeft: 10 }} variant="filled" onChange={this.handleInclinationFilter}>
-            <MenuItem value={''}>
+          <Select style={{ width: 245, marginLeft: 10 }} variant="filled" onChange={this.handleInclinationFilter} value={orbitValue}>
+            <MenuItem value={'-'}>
               -
             </MenuItem>
             <MenuItem value={RETROGRADE}>
@@ -272,6 +279,7 @@ export class Browse extends React.Component<any, any> {
           <If condition={this.state.current}>
             <TleBrowserWrapper>
               <TleBrowser data={this.state.current}/>
+              <SatellitePosition satelliteId={this.state.current !== null ? this.state.current.satelliteId : null}/>
             </TleBrowserWrapper>
           </If>
         </Drawer>
