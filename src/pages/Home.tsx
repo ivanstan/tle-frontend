@@ -6,10 +6,14 @@ import { TlePopularProvider } from "../services/TlePopularProvider";
 import { Link } from "@material-ui/core";
 import styled from "styled-components";
 import { device } from "../util/responsive";
+import Satellite from "../services/Satellite";
+import { If } from "react-if";
+import { SatellitePosition } from "../components/SatellitePosition";
 
 interface HomeStateInterface {
   data: Tle | null;
   popular: any[];
+  propagation: any,
 }
 
 const PopularWrapper = styled.div`
@@ -51,6 +55,7 @@ export class Home extends React.Component<any, HomeStateInterface> {
 
 
   readonly state: HomeStateInterface = {
+    propagation: null,
     data: null,
     popular: [],
   };
@@ -65,13 +70,7 @@ export class Home extends React.Component<any, HomeStateInterface> {
     });
 
     if (id) {
-      this.provider.get(id).then(tle => {
-        this.setState({ data: tle });
-        window.scroll({
-          top: window.innerHeight + 64,
-          behavior: 'smooth'
-        });
-      });
+      this.provider.get(id).then(tle => this.updateTle(tle));
     }
   }
 
@@ -82,34 +81,36 @@ export class Home extends React.Component<any, HomeStateInterface> {
       this.props.history.push('/tle/' + tle.satelliteId);
     }
 
-    this.setState({
-      data: tle
-    }, () => {
-      if (tle) {
-        window.scroll({
-          top: window.innerHeight + 64,
-          behavior: 'smooth'
-        });
-      }
-    })
+    this.updateTle(tle);
   };
 
   componentWillReceiveProps(nextProps: any) {
     if (nextProps.match.params.id !== this.props.match.params.id) {
       const { id } = nextProps.match.params
 
-      this.provider.get(id).then(tle => {
-        this.setState({ data: tle });
-        window.scroll({
-          top: window.innerHeight + 64,
-          behavior: 'smooth'
-        });
-      });
+      if (id) {
+        this.provider.get(id).then(tle => this.updateTle(tle));
+      }
     }
   }
 
+  updateTle = (tle: Tle|null) => {
+    if (!tle) {
+      return;
+    }
+
+    this.setState({
+      propagation: Satellite.sgp4(tle, new Date()),
+      data: tle
+    });
+    window.scroll({
+      top: window.innerHeight + 64,
+      behavior: 'smooth'
+    });
+  };
+
   public render() {
-    const { data, popular } = this.state;
+    const { data, popular, propagation } = this.state;
 
     return (
       <div className="container" id="home-page">
@@ -157,6 +158,10 @@ export class Home extends React.Component<any, HomeStateInterface> {
               <p className="pb-2">Latest two line element data for selected satellite</p>
 
               <TleBrowser data={data}/>
+
+              <If condition={propagation !== null}>
+                <SatellitePosition satelliteId={data.satelliteId} propagation={propagation}/>
+              </If>
 
             </div>}
           </div>

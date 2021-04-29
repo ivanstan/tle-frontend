@@ -1,10 +1,16 @@
 import React from "react";
-import TleApi from "../services/TleApi";
+import { GeoMap } from "./GeoMap";
+import Marker from "react-google-maps/lib/components/Marker";
+import { If } from "react-if";
+import Polyline from "react-google-maps/lib/components/Polyline";
+
+const icon = new google.maps.MarkerImage('/images/marker.svg', null, null, new google.maps.Point(15, 15), new google.maps.Size(30, 30));
 
 export class SatellitePosition extends React.Component<any, any> {
 
   readonly state: any = {
     satelliteId: null,
+    propagation: null
   }
 
   shouldComponentUpdate(nextProps: Readonly<any>, nextState: Readonly<any>, nextContext: any): boolean {
@@ -19,8 +25,34 @@ export class SatellitePosition extends React.Component<any, any> {
   }
 
   render() {
-    console.log(this.state)
+    const { propagation } = this.state;
 
-    return null;
+    return <>
+      <GeoMap
+        containerElement={<div className="mt-3" style={{ height: 510, width: '100%' }}/>}
+        mapElement={<div style={{ height: `100%` }}/>}
+      >
+        <If condition={propagation}>
+          <Marker position={{ lat: propagation.geodetic.latitude, lng: propagation.geodetic.longitude }} icon={icon}/>
+        </If>
+
+        <If condition={propagation.groundTracks}>
+          <Polyline
+            path={propagation.groundTracks}
+            // geodesic={true}
+            options={{
+              strokeColor: "#74BD8C",
+              strokeOpacity: 0.75,
+              strokeWeight: 2,
+            }}
+          />
+        </If>
+      </GeoMap>
+      <If condition={propagation}>
+        <span style={{ fontSize: 12 }}>
+          {propagation.tle.name} position on {propagation.parameters.date}
+        </span>
+      </If>
+    </>;
   }
 }

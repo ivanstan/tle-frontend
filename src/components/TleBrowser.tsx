@@ -62,7 +62,7 @@ export class TleBrowser extends React.Component<any, any> {
           </div>
           {/*<div>{data.line1}</div>*/}
 
-          <div className="line1">
+          <div className="line1" style={{minWidth: 651}}>
           <span className={'element line_number'}
                 onMouseEnter={(element) => this.hover(TleElements.lineNumber1, element)}>{data.getLineNumberRaw(LineNumber.LINE1)}</span>
             &nbsp;

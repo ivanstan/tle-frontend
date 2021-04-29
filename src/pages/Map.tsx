@@ -1,12 +1,11 @@
 import React from "react";
-import { GoogleMap, Marker, withGoogleMap } from "react-google-maps"
-import { styles } from '../util/map';
 import * as satellite from 'satellite.js';
 import { twoline2satrec } from 'satellite.js';
-import { DateTime } from 'luxon';
 import { dateToAtom } from "../util/date";
+import { GeoMap } from "../components/GeoMap";
+import Marker from "react-google-maps/lib/components/Marker";
 
-class Google extends React.Component<any> {
+class Map extends React.Component {
 
   state = {
     markers: []
@@ -17,7 +16,7 @@ class Google extends React.Component<any> {
 
     let atom = dateToAtom(date);
 
-    let result1 = await fetch('https://tle.ivanstanojevic.me/api/tle/25544/vector?date=' + atom);
+    let result1 = await fetch('https://tle.ivanstanojevic.me/api/tle/25544/propagate?date=' + atom);
     let response1 = await result1.json();
 
     let result2 = await fetch('https://tle.ivanstanojevic.me/api/tle/25544');
@@ -38,40 +37,25 @@ class Google extends React.Component<any> {
           lng: response1.geodetic.longitude,
         },
         {
-          lat: positionGd.latitude * 180/ Math.PI,
-          lng: positionGd.longitude * 180/ Math.PI,
+          lat: positionGd.latitude * 180 / Math.PI,
+          lng: positionGd.longitude * 180 / Math.PI,
         }
-        ],
+      ],
     })
   }
+
 
   render() {
     const { markers } = this.state;
 
-    console.log(markers)
-
-    return (
-      <GoogleMap
-        defaultCenter={{ lat: 40.756795, lng: -73.954298 }}
-        defaultZoom={4}
-        defaultOptions={{ styles: styles }}
-      >
-        {markers.map((marker: any) => <Marker position={{ lat: marker.lat, lng: marker.lng }}/>)}
-      </GoogleMap>
-    );
-  }
-}
-
-const GoogleMapExample = withGoogleMap(Google);
-
-class Map extends React.Component {
-  render() {
     return (
       <div>
-        <GoogleMapExample
+        <GeoMap
           containerElement={<div style={{ height: window.innerHeight - 64, width: '100%' }}/>}
           mapElement={<div style={{ height: `100%` }}/>}
-        />
+        >
+          {markers.map((marker: any) => <Marker position={{ lat: marker.lat, lng: marker.lng }}/>)}
+        </GeoMap>
       </div>
     );
   }

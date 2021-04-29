@@ -109,6 +109,10 @@ export class TleParser extends Tle {
     return this.line2.substring(52, 63).trim()
   }
 
+  getPeriod(): number {
+    return 86400 / parseFloat(this.getMeanMotionRaw());
+  }
+
   getRevolutionNumberRaw(): string {
     return this.line2.substring(63, 68).trim()
   }
