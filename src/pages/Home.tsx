@@ -1,6 +1,6 @@
 import React from "react";
 import { TleSelect } from "../components/TleSelect";
-import { Tle, TleProvider } from "tle-client";
+import { Tle } from "tle-client";
 import { TleBrowser } from "../components/TleBrowser";
 import { TlePopularProvider } from "../services/TlePopularProvider";
 import { Link } from "@material-ui/core";
@@ -9,9 +9,9 @@ import { device } from "../util/responsive";
 import Satellite from "../services/Satellite";
 import { If } from "react-if";
 import { SatellitePosition } from "../components/SatellitePosition";
+import AbstractTlePage, { AbstractTlePageStateInterface } from "./AbstractTlePage";
 
-interface HomeStateInterface {
-  data: Tle | null;
+interface HomeStateInterface extends AbstractTlePageStateInterface {
   popular: any[];
   propagation: any,
 }
@@ -41,18 +41,15 @@ const CenterTitle = styled.p`
 
 const PopularItemWrapper = styled.div``;
 
-export class Home extends React.Component<any, HomeStateInterface> {
+export class Home extends AbstractTlePage<any, HomeStateInterface> {
 
-  private provider: TleProvider;
   private popular: TlePopularProvider;
 
   constructor(props: any) {
     super(props);
 
-    this.provider = new TleProvider();
     this.popular = new TlePopularProvider();
   }
-
 
   readonly state: HomeStateInterface = {
     propagation: null,
@@ -61,17 +58,12 @@ export class Home extends React.Component<any, HomeStateInterface> {
   };
 
   componentDidMount() {
-    const { id } = this.props.match.params;
-
+    super.componentDidMount();
     this.provider.search().then((data: any) => {
       if (data) {
         this.setState({ popular: data });
       }
     });
-
-    if (id) {
-      this.provider.get(id).then(tle => this.updateTle(tle));
-    }
   }
 
   onChange = (tle: any | null) => {
@@ -84,17 +76,7 @@ export class Home extends React.Component<any, HomeStateInterface> {
     this.updateTle(tle);
   };
 
-  componentWillReceiveProps(nextProps: any) {
-    if (nextProps.match.params.id !== this.props.match.params.id) {
-      const { id } = nextProps.match.params
-
-      if (id) {
-        this.provider.get(id).then(tle => this.updateTle(tle));
-      }
-    }
-  }
-
-  updateTle = (tle: Tle|null) => {
+  protected updateTle = (tle: Tle|null) => {
     if (!tle) {
       return;
     }

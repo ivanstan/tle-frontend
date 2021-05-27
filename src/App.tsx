@@ -6,9 +6,9 @@ import { Navigation } from "./components/Navigation";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { Health } from "./pages/Health";
 import { Browse } from "./pages/Browse";
-import Map from "./pages/Map";
 import * as Sentry from "@sentry/react";
 import { isProduction } from "./util/common";
+import { FlyOver } from "./pages/FlyOver";
 
 const theme = createMuiTheme({
   palette: {
@@ -38,12 +38,14 @@ function App() {
           <Switch>
             <Route path="/" exact component={Home}/>
             <Route path="/tle/:id" exact component={Home}/>
+            <Route path="/tle/:id/flyover" exact component={FlyOver}/>
+
             <Route path="/docs" exact component={Docs}/>
             <Route path="/operation/record" exact component={Docs}/>
             <Route path="/operation/collection" exact component={Docs}/>
+
             <Route path="/health" exact component={Health}/>
             <Route path="/browse" exact component={Browse}/>
-            <Route path="/map" exact component={Map}/>
           </Switch>
         </Router>
       </ThemeProvider>

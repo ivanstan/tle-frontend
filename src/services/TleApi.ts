@@ -2,6 +2,7 @@ import { dateToAtom } from "../util/date";
 import { Tle } from "tle-client";
 import * as satellite from "satellite.js";
 import { TleParser } from "./TleParser";
+import { LatLng } from "../components/GeoMap";
 
 export class TleApi {
 
@@ -48,6 +49,22 @@ export class TleApi {
 
     return result
   }
+
+  flyOver = async (tle: Tle | number, position: LatLng) => {
+    let id = tle;
+    if (typeof tle === "object") {
+      id = tle.satelliteId;
+    }
+
+    const params = new URLSearchParams();
+    params.append('latitude', position.lat.toString());
+    params.append('longitude', position.lng.toString());
+
+    let result: any = await fetch(`https://tle.ivanstanojevic.me/api/tle/${id}/pass?${params.toString()}`)
+    result = await result.json();
+
+    return result.member || [];
+  };
 
 }
 
