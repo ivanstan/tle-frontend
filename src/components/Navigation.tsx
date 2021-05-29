@@ -3,6 +3,7 @@ import { HideOnScroll } from './HideOnScroll';
 import { AppBar, Button, Drawer, IconButton, Toolbar, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import styled from 'styled-components';
+import { DonateButton } from "./DonateButton";
 
 const Menu = styled.div`
   background: #0b3d91;
@@ -67,6 +68,12 @@ export class Navigation extends React.Component<any, any> {
             <div className={'d-none d-md-block'}>
               {menu}
             </div>
+
+            <div style={{flexGrow: 1}}>
+
+            </div>
+
+            <DonateButton/>
 
           </Toolbar>
 

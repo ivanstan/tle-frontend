@@ -41,6 +41,17 @@ const columns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
+    field: 'semi_major_axis',
+    headerName: 'Semi Major Axis',
+    type: 'float',
+    width: 250,
+    valueGetter: (params) => {
+      return params.row.extra.semi_major_axis / 1000;
+    },
+    disableColumnMenu: true,
+    sortable: true
+  },
+  {
     field: 'inclination',
     headerName: 'Inclination',
     type: 'float',
@@ -49,7 +60,7 @@ const columns: GridColDef[] = [
     disableColumnMenu: true,
     filterable: true,
     valueGetter: (params) => {
-      return params.row.extra.inclination;
+      return params.row.extra.inclination.toFixed(2) + '°';
     }
   },
   {
@@ -74,6 +85,18 @@ const columns: GridColDef[] = [
     disableColumnMenu: true,
     sortable: true
   },
+  {
+    field: 'raan',
+    headerName: 'RAAN',
+    type: 'string',
+    width: 250,
+    valueGetter: (params) => {
+      return params.row.extra.raan.toFixed(2) + '°';
+    },
+    disableColumnMenu: true,
+    sortable: true
+  },
+
 ];
 
 const TleBrowserWrapper = styled.div`
