@@ -41,17 +41,6 @@ const columns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: 'semi_major_axis',
-    headerName: 'Semi Major Axis',
-    type: 'float',
-    width: 250,
-    valueGetter: (params) => {
-      return params.row.extra.semi_major_axis / 1000;
-    },
-    disableColumnMenu: true,
-    sortable: true
-  },
-  {
     field: 'inclination',
     headerName: 'Inclination',
     type: 'float',
@@ -70,6 +59,17 @@ const columns: GridColDef[] = [
     width: 250,
     valueGetter: (params) => {
       return params.row.extra.eccentricity;
+    },
+    disableColumnMenu: true,
+    sortable: true
+  },
+  {
+    field: 'semi_major_axis',
+    headerName: 'Semi Major Axis',
+    type: 'float',
+    width: 250,
+    valueGetter: (params) => {
+      return (parseFloat(params.row.extra.semi_major_axis) / 1000).toFixed(2);
     },
     disableColumnMenu: true,
     sortable: true

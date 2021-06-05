@@ -2,7 +2,7 @@ import { dateToAtom } from "../util/date";
 import { Tle } from "tle-client";
 import * as satellite from "satellite.js";
 import { TleParser } from "./TleParser";
-import { LatLng } from "../components/GeoMap";
+import { LatLng } from "../model/LatLng";
 
 export class TleApi {
 
@@ -60,7 +60,7 @@ export class TleApi {
     params.append('latitude', position.lat.toString());
     params.append('longitude', position.lng.toString());
 
-    let result: any = await fetch(`https://tle.ivanstanojevic.me/api/tle/${id}/pass?${params.toString()}`)
+    let result: any = await fetch(`https://tle.ivanstanojevic.me/api/tle/${id}/flyover?${params.toString()}`)
     result = await result.json();
 
     return result.member || [];

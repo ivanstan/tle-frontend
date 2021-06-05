@@ -45,13 +45,13 @@ abstract class AbstractTlePage<P extends RouteComponentProps<RouteParams>, S ext
 
   protected updateTle = (tle: Tle | null) => {
     if (!tle) {
-      return;
+      return
     }
 
     this.setState({
       data: tle
-    });
-  };
+    })
+  }
 }
 
 export default AbstractTlePage;

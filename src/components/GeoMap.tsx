@@ -3,78 +3,33 @@ import { styles } from "../util/map";
 import { GoogleMap, withGoogleMap } from "react-google-maps"
 import Marker from "react-google-maps/lib/components/Marker";
 import { If } from "react-if";
-import { Tle } from "tle-client/index";
-
-const localStorageObserver = 'observer';
-
-const defaultObserverPosition = {
-  lat: 0,
-  lng: 0,
-};
+import { LatLng } from "../model/LatLng";
+import { Observer } from "../model/Observer";
+import { ObserverService } from "../services/ObserverService";
 
 interface GeoMapPropsInterface {
   zoom?: number;
   renderObserver?: boolean;
   onObserverPositionChange?: Function;
+  observer?: Observer;
 }
 
 interface GeoMapStateInterface {
-  observer: LatLng
-}
-
-export interface LatLng {
-  lat: number
-  lng: number
-}
-
-function getHtml5Geolocation(defaultValue: LatLng): Promise<LatLng> {
-  if (!navigator.geolocation) {
-    return new Promise(resolve => resolve(defaultValue));
-  }
-
-  return new Promise(resolve => {
-    navigator.geolocation.getCurrentPosition((position => {
-      resolve({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      });
-    }), () => {
-      resolve(defaultValue)
-    });
-  });
+  observer?: Observer
 }
 
 class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateInterface> {
 
-  private _map: any;
-
   readonly state = {
-    observer: {
-      lat: defaultObserverPosition.lat,
-      lng: defaultObserverPosition.lng,
-    }
+    observer: ObserverService.initial()
   }
 
+  private _map: any;
+
   componentDidMount() {
-    let json = localStorage.getItem(localStorageObserver) || '{}';
-    let observer = JSON.parse(json);
+    const { observer } = this.props;
 
-    if (Object.keys(observer).length === 0) {
-      getHtml5Geolocation(defaultObserverPosition).then(location => {
-        let newObserver = {
-          ...location
-        };
-
-        this.setState({observer: newObserver})
-        this.callOnObserverPositionChange(observer.lat, observer.lng)
-      });
-    } else {
-      let newObserver = {
-        lat: observer.lat,
-        lng: observer.lng,
-      };
-
-      this.setState({observer: newObserver})
+    if (observer) {
       this.callOnObserverPositionChange(observer.lat, observer.lng)
     }
   }
@@ -88,7 +43,9 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
       lng: lng,
     };
 
-    localStorage.setItem(localStorageObserver, JSON.stringify(observer));
+    this.setState({
+      observer: observer,
+    })
 
     this.callOnObserverPositionChange(lat, lng);
   };
@@ -105,8 +62,11 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
   };
 
   render() {
-    const { zoom, renderObserver } = this.props;
-    const { observer } = this.state;
+    let { zoom, renderObserver, observer } = this.props;
+
+    if (!observer) {
+      observer = ObserverService.initial();
+    }
 
     return (
       <GoogleMap

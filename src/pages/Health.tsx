@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 
 const Badge = styled.img`
   margin-right: 5px;
@@ -71,7 +71,7 @@ export class Health extends React.Component<any, any> {
           </div>
 
           <div className="col-12 py-4">
-            <Bar
+            <Line
               data={data}
               height={400}
               options={options}
