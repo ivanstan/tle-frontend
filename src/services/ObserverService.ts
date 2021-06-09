@@ -2,13 +2,20 @@ import { Observer } from "../model/Observer";
 import { LatLng } from "../model/LatLng";
 
 const defaultObserverPosition: LatLng = {
-  lat: 0,
-  lng: 0,
+  latitude: 0,
+  longitude: 0,
 };
 
 const localStorageObserver = 'observer';
 
 export class ObserverService {
+
+  public observer: Observer;
+
+  constructor(props: any) {
+
+    this.observer = new Observer();
+  }
 
   getHtml5Geolocation(defaultValue: LatLng): Promise<LatLng> {
     if (!navigator.geolocation) {
@@ -18,8 +25,8 @@ export class ObserverService {
     return new Promise(resolve => {
       navigator.geolocation.getCurrentPosition((position => {
         resolve({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
         })
       }), () => {
         resolve(defaultValue)
@@ -38,15 +45,15 @@ export class ObserverService {
       newObserver = { ...location }
     } else {
       newObserver = {
-        lat: observer.lat,
-        lng: observer.lng,
+        latitude: observer.latitude,
+        longitude: observer.longitude,
       }
     }
 
     return new Promise(resolve => resolve(
       {
-        lat: newObserver.lat,
-        lng: newObserver.lng,
+        latitude: newObserver.latitude,
+        longitude: newObserver.longitude,
       }
     ));
   }

@@ -1,11 +1,11 @@
 import React from "react";
 import * as satellite from 'satellite.js';
 import { twoline2satrec } from 'satellite.js';
-import { dateToAtom } from "../util/date";
+import { toAtom } from "../util/date";
 import { GeoMap } from "../components/GeoMap";
 import Marker from "react-google-maps/lib/components/Marker";
 
-class Map extends React.Component {
+export class Map extends React.Component {
 
   state = {
     markers: []
@@ -14,9 +14,7 @@ class Map extends React.Component {
   async componentDidMount() {
     const date: any = new Date();
 
-    let atom = dateToAtom(date);
-
-    let result1 = await fetch('https://tle.ivanstanojevic.me/api/tle/25544/propagate?date=' + atom);
+    let result1 = await fetch('https://tle.ivanstanojevic.me/api/tle/25544/propagate?date=' + toAtom(date));
     let response1 = await result1.json();
 
     let result2 = await fetch('https://tle.ivanstanojevic.me/api/tle/25544');
@@ -61,4 +59,3 @@ class Map extends React.Component {
   }
 }
 
-export default Map;

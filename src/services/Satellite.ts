@@ -1,6 +1,6 @@
 import * as satellite from 'satellite.js';
 import { Tle } from "tle-client";
-import { dateToAtom } from "../util/date";
+import { toAtom } from "../util/date";
 import { TleApi } from "./TleApi";
 
 export class Satellite {
@@ -19,7 +19,7 @@ export class Satellite {
       tle: tle,
       parameters: {
         satelliteId: tle.satelliteId,
-        date: dateToAtom(date)
+        date: toAtom(date)
       },
       groundTracks: TleApi.groundTracks(tle, date),
       geodetic: {

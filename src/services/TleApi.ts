@@ -1,4 +1,4 @@
-import { dateToAtom } from "../util/date";
+import { toAtom } from "../util/date";
 import { Tle } from "tle-client";
 import * as satellite from "satellite.js";
 import { TleParser } from "./TleParser";
@@ -9,7 +9,7 @@ export class TleApi {
   static GROUND_TRACK_ORBITS = 1;
 
   predict = async (satelliteId: number, date: Date) => {
-    let atom = dateToAtom(date)
+    let atom = toAtom(date)
 
     let result: any = await fetch(`https://tle.ivanstanojevic.me/api/tle/${satelliteId}/propagate?date=${atom}`)
     result = await result.json();
@@ -57,13 +57,12 @@ export class TleApi {
     }
 
     const params = new URLSearchParams();
-    params.append('latitude', position.lat.toString());
-    params.append('longitude', position.lng.toString());
+    params.append('latitude', position.latitude.toString());
+    params.append('longitude', position.longitude.toString());
 
     let result: any = await fetch(`https://tle.ivanstanojevic.me/api/tle/${id}/flyover?${params.toString()}`)
-    result = await result.json();
 
-    return result.member || [];
+    return await result.json();
   };
 
 }

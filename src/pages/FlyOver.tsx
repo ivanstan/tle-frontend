@@ -1,50 +1,57 @@
-import React from "react";
-import { GeoMap } from "../components/GeoMap";
-import TleApi from "../services/TleApi";
-import AbstractTlePage, { AbstractTlePageStateInterface } from "./AbstractTlePage";
-import ObserverService, { ObserverService as ObserverServiceStatic } from "../services/ObserverService";
-import { Observer } from "../model/Observer";
-import { Tle } from "tle-client";
+import React from "react"
+import { GeoMap } from "../components/GeoMap"
+import TleApi from "../services/TleApi"
+import { AbstractTlePageStateInterface } from "./AbstractTlePage"
+import { Tle, TleProvider } from "tle-client"
+import { Link, List, ListItem, ListItemText } from "@material-ui/core"
+import { formatDiff, fromAtom } from "../util/date"
+import { inject, observer } from "mobx-react";
+import { RouteComponentProps } from "react-router";
+import { ObserverService, default as ObserverServiceInstance } from "../services/ObserverService"
 
 interface FlyOverStateInterface extends AbstractTlePageStateInterface {
-  flyOver: any[],
-  observer: Observer,
+  flyOver?: any,
 }
 
-export class FlyOver extends AbstractTlePage<any, FlyOverStateInterface> {
+type RouteParams = {
+  id: string
+}
 
-  readonly state: FlyOverStateInterface = {
-    flyOver: [],
+interface FlyOverPropsInterface extends RouteComponentProps<RouteParams> {
+  ObserverService: ObserverService
+}
+
+@observer
+@inject('ObserverService')
+export class FlyOver extends React.Component<any, any> {
+
+  readonly state: any = {
+    flyOver: null,
     data: null,
-    observer: ObserverServiceStatic.initial()
-  };
+  }
 
-  constructor(props: any) {
+  provider: TleProvider
+
+  public constructor(props: RouteComponentProps<RouteParams>) {
     super(props);
+
+    this.provider = new TleProvider();
   }
 
-  componentDidMount() {
-    super.componentDidMount();
+  async componentDidMount() {
+    const { id } = this.props.match.params;
 
-    const { data } = this.state;
+    const { ObserverService } = this.props
 
-    ObserverService.get().then(observer => {
-      this.setState({ observer: observer })
+    let tle = await this.provider.get(parseInt(id))
 
-      if (data) {
-        TleApi.flyOver(this.state.data, observer).then(result => this.setState({ flyOver: result }));
-      }
-    });
-  }
-
-  onObserverPositionChange = (latLng: any) => {
-    const { data } = this.state;
-
-    if (data) {
-      this.setState({ observer: latLng })
-      TleApi.flyOver(data, latLng).then(result => this.setState({ flyOver: result }));
+    let flyOver = null
+    if (tle) {
+      flyOver = await TleApi.flyOver(tle, ObserverService?.observer)
     }
-  };
+
+    this.setState({ flyOver: flyOver, data: tle });
+  }
 
   protected updateTle = (tle: Tle | null) => {
     if (!tle) {
@@ -55,43 +62,77 @@ export class FlyOver extends AbstractTlePage<any, FlyOverStateInterface> {
       data: tle
     })
 
-    TleApi.flyOver(tle, this.state.observer).then(result => this.setState({ flyOver: result }));
-  };
+    TleApi.flyOver(tle, this.props.ObserverService.observer).then(result => this.setState({ flyOver: result }))
+  }
+
+  componentWillReceiveProps(nextProps: any) {
+
+    console.log(nextProps)
+
+    if (nextProps.match.params.id !== this.props.match.params.id) {
+      const { id } = nextProps.match.params
+
+      if (id) {
+        this.provider.get(id).then(tle => this.updateTle(tle));
+      }
+    }
+
+    TleApi.flyOver(nextProps.data, nextProps.ObserverService.observer).then(result => this.setState({ flyOver: result }))
+  }
 
   render() {
-    const { flyOver, observer } = this.state;
+    const { flyOver, data } = this.state
+
+    if (!flyOver) {
+      return null
+    }
+
+    const timezone = flyOver.observer.timezone
+
+    let observerTime = fromAtom(flyOver.observer.date)
 
     return (
       <div className={'d-flex p-4'}>
-
-        <div className={'flex-grow-1 d-flex flex-column'}>
-
+        <div className={'flex-grow-1 d-flex'}>
           <div className={'flex-grow-1'} style={{ maxHeight: '50%' }}>
             <GeoMap
-              observer={observer}
               renderObserver={true}
-              onObserverPositionChange={this.onObserverPositionChange}
-              containerElement={<div style={{ height: window.innerHeight - 64, width: '100%' }}/>}
-              mapElement={<div style={{ height: `50%` }}/>}
+              containerElement={<div style={{ height: 400, width: '100%' }}/>}
+              mapElement={<div style={{ height: 400 }}/>}
             />
+            <span style={{ fontSize: 12 }}>
+              {this.props.ObserverService.latitude}
+
+              * Drag marker to set your location
+            </span>
           </div>
-
-          <div className={'flex-grow-1'}>
-
-
-          </div>
-
         </div>
 
-        <div className={'flex-grow-1 pl-4'}>
-          {flyOver.map((element: any, index: number) => {
-            return <p key={index}>{element.aos.date}</p>;
-          })}
+        <div className={'flex-grow-1'} style={{ paddingLeft: 24 }}>
+          <List dense>
+            {
+              flyOver.member.map((element: any, index: number) => {
+                let flyOverTime = fromAtom(element.aos.date)
+
+                let diff = flyOverTime.diff(observerTime, ['days', 'hours', 'minutes', 'seconds'])
+
+                let params = new URLSearchParams({
+                  'id[]': data.satelliteId,
+                  'date': element.aos.date,
+                })
+                let mapLink = '#/map?' + params.toString()
+
+                return <ListItem key={index}>
+                  <ListItemText
+                    primary={'AOS ' + flyOverTime.toFormat('HH:mm:ss yyyy-MM-dd ZZ')}
+                    secondary={formatDiff(diff)}
+                  />
+                  <Link href={mapLink}>View map</Link>
+                </ListItem>
+              })}
+          </List>
         </div>
-
-
       </div>
-
-    );
+    )
   }
 }

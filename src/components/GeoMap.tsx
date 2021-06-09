@@ -30,7 +30,7 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
     const { observer } = this.props;
 
     if (observer) {
-      this.callOnObserverPositionChange(observer.lat, observer.lng)
+      this.callOnObserverPositionChange(observer.latitude, observer.longitude)
     }
   }
 
@@ -39,8 +39,8 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
     const lng = event.latLng.lng();
 
     const observer: LatLng = {
-      lat: lat,
-      lng: lng,
+      latitude: lat,
+      longitude: lng,
     };
 
     this.setState({
@@ -90,7 +90,7 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
       >
         {this.props.children}
         <If condition={renderObserver}>
-          <Marker position={{ lat: observer.lat, lng: observer.lng }} draggable={true} onDragEnd={this.onObserverDragEnd}/>
+          <Marker position={{ lat: observer.latitude, lng: observer.longitude }} draggable={true} onDragEnd={this.onObserverDragEnd}/>
         </If>
       </GoogleMap>
     );
