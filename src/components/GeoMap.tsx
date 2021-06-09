@@ -5,7 +5,7 @@ import Marker from "react-google-maps/lib/components/Marker";
 import { If } from "react-if";
 import { LatLng } from "../model/LatLng";
 import { Observer } from "../model/Observer";
-import { ObserverService } from "../services/ObserverService";
+import { ObserverService, default as ObserverServiceInstance } from "../services/ObserverService";
 
 interface GeoMapPropsInterface {
   zoom?: number;
@@ -17,6 +17,7 @@ interface GeoMapPropsInterface {
 interface GeoMapStateInterface {
   observer?: Observer
 }
+
 
 class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateInterface> {
 
@@ -37,6 +38,8 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
   onObserverDragEnd = (event: any): void => {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
+
+    ObserverServiceInstance.setLatitude(event.latLng.lat());
 
     const observer: LatLng = {
       latitude: lat,

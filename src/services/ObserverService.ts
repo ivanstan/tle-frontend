@@ -1,5 +1,6 @@
 import { Observer } from "../model/Observer";
 import { LatLng } from "../model/LatLng";
+import { action, makeObservable, observable } from "mobx";
 
 const defaultObserverPosition: LatLng = {
   latitude: 0,
@@ -10,10 +11,22 @@ const localStorageObserver = 'observer';
 
 export class ObserverService {
 
+
+
   public observer: Observer;
 
-  constructor(props: any) {
+  @observable public latitude: number = 0;
 
+  @action
+  setLatitude(lat: number) {
+
+    console.log(lat);
+
+    this.latitude = lat
+  }
+
+  constructor() {
+    makeObservable(this)
     this.observer = new Observer();
   }
 

@@ -22,7 +22,6 @@ interface FlyOverPropsInterface extends RouteComponentProps<RouteParams> {
 }
 
 @observer
-@inject('ObserverService')
 export class FlyOver extends React.Component<any, any> {
 
   readonly state: any = {
@@ -47,7 +46,7 @@ export class FlyOver extends React.Component<any, any> {
 
     let flyOver = null
     if (tle) {
-      flyOver = await TleApi.flyOver(tle, ObserverService?.observer)
+      flyOver = await TleApi.flyOver(tle, ObserverServiceInstance.observer)
     }
 
     this.setState({ flyOver: flyOver, data: tle });
@@ -101,7 +100,7 @@ export class FlyOver extends React.Component<any, any> {
               mapElement={<div style={{ height: 400 }}/>}
             />
             <span style={{ fontSize: 12 }}>
-              {this.props.ObserverService.latitude}
+              {ObserverServiceInstance.latitude}
 
               * Drag marker to set your location
             </span>
