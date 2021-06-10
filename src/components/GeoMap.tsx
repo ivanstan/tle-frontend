@@ -35,6 +35,11 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
   render() {
     let { zoom, renderObserver, observer } = this.props
 
+    if (!observer) {
+      return null
+    }
+
+    // @ts-ignore
     return (
       <GoogleMap
         ref={(map) => this._map = map}
