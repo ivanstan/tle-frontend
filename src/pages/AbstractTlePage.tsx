@@ -1,7 +1,7 @@
-import React from "react";
-import { TleProvider } from "tle-client";
-import { Tle } from "tle-client";
-import { RouteComponentProps } from "react-router";
+import React from "react"
+import { TleProvider } from "tle-client"
+import { Tle } from "tle-client"
+import { RouteComponentProps } from "react-router"
 
 export interface AbstractTlePageStateInterface {
   data: any | null
@@ -13,16 +13,16 @@ type RouteParams = {
 
 abstract class AbstractTlePage<P extends RouteComponentProps<RouteParams>, S extends AbstractTlePageStateInterface> extends React.Component<RouteComponentProps<RouteParams>, S> {
 
-  protected provider: TleProvider;
+  protected provider: TleProvider
 
   readonly state: any = {
     data: null,
-  };
+  }
 
   protected constructor(props: RouteComponentProps<RouteParams>) {
-    super(props);
+    super(props)
 
-    this.provider = new TleProvider();
+    this.provider = new TleProvider()
   }
 
   componentWillReceiveProps(nextProps: any) {
@@ -30,16 +30,16 @@ abstract class AbstractTlePage<P extends RouteComponentProps<RouteParams>, S ext
       const { id } = nextProps.match.params
 
       if (id) {
-        this.provider.get(id).then(tle => this.updateTle(tle));
+        this.provider.get(id).then(tle => this.updateTle(tle))
       }
     }
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params;
+    const { id } = this.props.match.params
 
     if (id) {
-      this.provider.get(parseInt(id)).then(tle => this.updateTle(tle));
+      this.provider.get(parseInt(id)).then(tle => this.updateTle(tle))
     }
   }
 
@@ -54,4 +54,4 @@ abstract class AbstractTlePage<P extends RouteComponentProps<RouteParams>, S ext
   }
 }
 
-export default AbstractTlePage;
+export default AbstractTlePage

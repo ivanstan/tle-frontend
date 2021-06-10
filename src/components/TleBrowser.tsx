@@ -1,8 +1,8 @@
-import React from "react";
-import { LineNumber, TleParser } from "../services/TleParser";
-import { If } from 'react-if';
-import { CopyButton } from "./CopyButton";
-import { TleElementDetails } from "./TleElementDetails";
+import React from "react"
+import { LineNumber, TleParser } from "../services/TleParser"
+import { If } from 'react-if'
+import { CopyButton } from "./CopyButton"
+import { TleElementDetails } from "./TleElementDetails"
 
 enum TleElements {
   // Line1 elements
@@ -43,15 +43,15 @@ export class TleBrowser extends React.Component<any, any> {
   }
 
   hover = (element: string, domElement: any): void => {
-    const styles: any = getComputedStyle(domElement.target);
-    this.setState({ active: element, color: styles['border-color'] });
-  };
+    const styles: any = getComputedStyle(domElement.target)
+    this.setState({ active: element, color: styles['border-color'] })
+  }
 
   render() {
-    const { active, color } = this.state;
-    const data = new TleParser(this.props.data);
+    const { active, color } = this.state
+    const data = new TleParser(this.props.data)
 
-    let overflow:any = (window.innerWidth > 500) ? 'auto' : 'scroll';
+    let overflow:any = (window.innerWidth > 500) ? 'auto' : 'scroll'
 
     return <>
       <div className="code tle-display d-flex justify-content-between" style={{overflowX: overflow}}>
@@ -65,36 +65,36 @@ export class TleBrowser extends React.Component<any, any> {
           <div className="line1" style={{minWidth: 651}}>
           <span className={'element line_number'}
                 onMouseEnter={(element) => this.hover(TleElements.lineNumber1, element)}>{data.getLineNumberRaw(LineNumber.LINE1)}</span>
-            &nbsp;
+            &nbsp
             <span className={'element satellite_id'}
                   onMouseEnter={(element) => this.hover(TleElements.satelliteId1, element)}>{data.getSatelliteIdRaw(LineNumber.LINE1)}</span>
             <span className={'element classification'}
                   onMouseEnter={(element) => this.hover(TleElements.classification, element)}>{data.getClassificationRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element launch-year'}
                   onMouseEnter={(element) => this.hover(TleElements.launchYear, element)}>{data.getLaunchYearRaw()}</span>
             <span className={'element launch-number'}
                   onMouseEnter={(element) => this.hover(TleElements.launchOfYear, element)}>{data.getLaunchNumberOfTheYearRaw()}</span>
             <span className={'element launch-piece'}
                   onMouseEnter={(element) => this.hover(TleElements.launchPiece, element)}>{data.getLaunchPieceRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element epoch-year'}
                   onMouseEnter={(element) => this.hover(TleElements.epochYear, element)}>{data.getEpochYearRaw()}</span>
             <span className={'element epoch-day'}
                   onMouseEnter={(element) => this.hover(TleElements.epochDay, element)}>{data.getEpochDayRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element first-derivative'}
                   onMouseEnter={(element) => this.hover(TleElements.firstDerivative, element)}>{data.getFirstTimeDerivativeOfMeanMotionRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element second-derivative'}
                   onMouseEnter={(element) => this.hover(TleElements.secondDerivative, element)}>{data.getSecondTimeDerivativeOfMeanMotionRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element drag-term'}
                   onMouseEnter={(element) => this.hover(TleElements.dragTerm, element)}>{data.getBstarDragTermRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element ephemeris-type'}
                   onMouseEnter={(element) => this.hover(TleElements.ephemerisType, element)}>{data.getEphemerisTypeRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element element-number'}
                   onMouseEnter={(element) => this.hover(TleElements.elementNumber, element)}>{data.getElementNumberRaw()}</span>
             <span className={'element checksum'}
@@ -105,28 +105,28 @@ export class TleBrowser extends React.Component<any, any> {
           <div className="line2">
           <span className={'element line_number'}
                 onMouseEnter={(element) => this.hover(TleElements.lineNumber2, element)}>{data.getLineNumberRaw(LineNumber.LINE2)}</span>
-            &nbsp;
+            &nbsp
             <span className={'element satellite_id'}
                   onMouseEnter={(element) => this.hover(TleElements.satelliteId2, element)}>{data.getSatelliteIdRaw(LineNumber.LINE2)}</span>
-            &nbsp;
+            &nbsp
             <span className={'element inclination'}
                   onMouseEnter={(element) => this.hover(TleElements.inclination, element)}>{data.getInclinationRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element raan'}
                   onMouseEnter={(element) => this.hover(TleElements.raan, element)}>{data.getRightAscensionOfAscendingNodeRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element eccentricity'}
                   onMouseEnter={(element) => this.hover(TleElements.eccentricity, element)}>{data.getEccentricityRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element argument-of-perigee'}
                   onMouseEnter={(element) => this.hover(TleElements.argumentOfPerigee, element)}>{data.getArgumentOfPerigeeRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element mean-anomaly'}
                   onMouseEnter={(element) => this.hover(TleElements.meanAnomaly, element)}>{data.getMeanAnomalyRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element mean-motion'}
                   onMouseEnter={(element) => this.hover(TleElements.meanMotion, element)}>{data.getMeanMotionRaw()}</span>
-            &nbsp;
+            &nbsp
             <span className={'element revolution-number'}
                   onMouseEnter={(element) => this.hover(TleElements.revolutionNumber, element)}>{data.getRevolutionNumberRaw()}</span>
             <span className={'element checksum'}
@@ -139,7 +139,7 @@ export class TleBrowser extends React.Component<any, any> {
       </div>
 
       <div className={'d-flex pt-1'} style={{fontSize: 12}}>
-        <span className={"d-none d-md-inline"}>Get daily updates for {data.name} using following API endpoint&nbsp;</span>
+        <span className={"d-none d-md-inline"}>Get daily updates for {data.name} using following API endpoint&nbsp</span>
         <a
           target="_blank"
           rel="nofollow"
@@ -232,7 +232,7 @@ export class TleBrowser extends React.Component<any, any> {
         </If>
       </div>
 
-    </>;
+    </>
   }
 
 }

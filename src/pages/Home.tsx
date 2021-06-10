@@ -1,98 +1,98 @@
-import React from "react";
-import { TleSelect } from "../components/TleSelect";
-import { Tle } from "tle-client";
-import { TleBrowser } from "../components/TleBrowser";
-import { TlePopularProvider } from "../services/TlePopularProvider";
-import { Link } from "@material-ui/core";
-import styled from "styled-components";
-import { device } from "../util/responsive";
-import Satellite from "../services/Satellite";
-import { If } from "react-if";
-import { SatellitePosition } from "../components/SatellitePosition";
-import AbstractTlePage, { AbstractTlePageStateInterface } from "./AbstractTlePage";
+import React from "react"
+import { TleSelect } from "../components/TleSelect"
+import { Tle } from "tle-client"
+import { TleBrowser } from "../components/TleBrowser"
+import { TlePopularProvider } from "../services/TlePopularProvider"
+import { Link } from "@material-ui/core"
+import styled from "styled-components"
+import { device } from "../util/responsive"
+import Satellite from "../services/Satellite"
+import { If } from "react-if"
+import { SatellitePosition } from "../components/SatellitePosition"
+import AbstractTlePage, { AbstractTlePageStateInterface } from "./AbstractTlePage"
 
 interface HomeStateInterface extends AbstractTlePageStateInterface {
-  popular: any[];
+  popular: any[]
   propagation: any,
 }
 
 const PopularWrapper = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 20px
 
-  display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(260px, 5fr));
+  display: grid
+  grid-template-columns: repeat(auto-fill,minmax(260px, 5fr))
 
   @media ${device.tablet} { 
-    margin-right: 100px;
-    margin-left: 100px;
+    margin-right: 100px
+    margin-left: 100px
   }
 
   @media ${device.laptop} { 
-    margin-right: 100px;
-    margin-left: 100px;
+    margin-right: 100px
+    margin-left: 100px
   }
 `
 
 const CenterTitle = styled.p`
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 40px;
-`;
+  font-weight: bold
+  text-align: center
+  margin-bottom: 40px
+`
 
-const PopularItemWrapper = styled.div``;
+const PopularItemWrapper = styled.div``
 
 export class Home extends AbstractTlePage<any, HomeStateInterface> {
 
-  private popular: TlePopularProvider;
+  private popular: TlePopularProvider
 
   constructor(props: any) {
-    super(props);
+    super(props)
 
-    this.popular = new TlePopularProvider();
+    this.popular = new TlePopularProvider()
   }
 
   readonly state: HomeStateInterface = {
     propagation: null,
     data: null,
     popular: [],
-  };
+  }
 
   componentDidMount() {
-    super.componentDidMount();
+    super.componentDidMount()
     this.provider.search().then((data: any) => {
       if (data) {
-        this.setState({ popular: data });
+        this.setState({ popular: data })
       }
-    });
+    })
   }
 
   onChange = (tle: any | null) => {
     if (tle === null) {
-      this.props.history.push('/');
+      this.props.history.push('/')
     } else {
-      this.props.history.push('/tle/' + tle.satelliteId);
+      this.props.history.push('/tle/' + tle.satelliteId)
     }
 
-    this.updateTle(tle);
-  };
+    this.updateTle(tle)
+  }
 
   protected updateTle = (tle: Tle|null) => {
     if (!tle) {
-      return;
+      return
     }
 
     this.setState({
       propagation: Satellite.sgp4(tle, new Date()),
       data: tle
-    });
+    })
     window.scroll({
       top: window.innerHeight + 64,
       behavior: 'smooth'
-    });
-  };
+    })
+  }
 
   public render() {
-    const { data, popular, propagation } = this.state;
+    const { data, popular, propagation } = this.state
 
     return (
       <div className="container" id="home-page">
@@ -105,9 +105,9 @@ export class Home extends AbstractTlePage<any, HomeStateInterface> {
               <p className={'py-4'}>
                 API provides up to date NORAD two line element sets for number of Earth orbiting satellites. Data is
                 provided
-                by&nbsp;<a href={"https://celestrak.com/"}
+                by&nbsp<a href={"https://celestrak.com/"}
                            target="_blank"
-                           rel="nofollow">CelesTrak</a>&nbsp;and served in web application friendly JSON format.
+                           rel="nofollow">CelesTrak</a>&nbspand served in web application friendly JSON format.
 
                 A two-line element set (TLE) is a data format encoding of orbital elements of an Earth-orbiting
                 object for a given point in time.
@@ -149,6 +149,6 @@ export class Home extends AbstractTlePage<any, HomeStateInterface> {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }

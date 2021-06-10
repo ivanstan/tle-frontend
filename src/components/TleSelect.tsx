@@ -1,17 +1,17 @@
-import React, { ChangeEvent } from "react";
-import TextField from "@material-ui/core/TextField";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { Tle, TleProvider } from "tle-client";
+import React, { ChangeEvent } from "react"
+import TextField from "@material-ui/core/TextField"
+import CircularProgress from "@material-ui/core/CircularProgress"
+import Autocomplete from "@material-ui/lab/Autocomplete"
+import { Tle, TleProvider } from "tle-client"
 
 export interface TleSelectPropsInterface {
-  value: Tle | null;
+  value: Tle | null
   onChange: Function
 }
 
 export class TleSelect extends React.Component<any, any> {
 
-  private provider: TleProvider;
+  private provider: TleProvider
 
   public readonly state = {
     open: false,
@@ -19,59 +19,59 @@ export class TleSelect extends React.Component<any, any> {
     options: [],
     value: null,
     inputValue: null,
-  };
+  }
 
   constructor(props: any) {
-    super(props);
+    super(props)
 
-    this.state.value = props.value;
-    this.state.inputValue = props.value?.name;
+    this.state.value = props.value
+    this.state.inputValue = props.value?.name
 
-    this.provider = new TleProvider();
+    this.provider = new TleProvider()
   }
 
   static getDerivedStateFromProps(props: TleSelectPropsInterface, state: any) {
 
     if (props.value === null) {
-      return null;
+      return null
     }
 
     return {
       value: props.value,
       inputValue: props.value.name,
-    };
+    }
   }
 
   public async query() {
-    const { inputValue } = this.state;
+    const { inputValue } = this.state
 
     this.provider.search(inputValue)
       .then((data: Tle[]) => {
-        this.setState({ options: data, loading: false });
+        this.setState({ options: data, loading: false })
       })
-      .catch(() => this.setState({ options: [], loading: false }));
+      .catch(() => this.setState({ options: [], loading: false }))
   }
 
   render() {
-    const { open, options, value, inputValue, loading } = this.state;
-    const { onChange } = this.props;
+    const { open, options, value, inputValue, loading } = this.state
+    const { onChange } = this.props
 
-    let width = (window.innerWidth < 500) ? 'auto' : 400;
+    let width = (window.innerWidth < 500) ? 'auto' : 400
 
     return <Autocomplete
       value={value}
       onChange={(event, newValue: any) => {
-        this.setState({ value: newValue });
+        this.setState({ value: newValue })
 
         if (onChange !== null && typeof onChange === 'function') {
-          onChange(newValue);
+          onChange(newValue)
         }
       }}
       style={{ width: width, margin: 'auto' }}
       open={open}
       onOpen={() => {
         if (options.length === 0) {
-          this.query();
+          this.query()
         }
         this.setState({ open: true })
       }}
@@ -88,7 +88,7 @@ export class TleSelect extends React.Component<any, any> {
           {...params}
           value={inputValue}
           onChange={(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-            this.setState({ inputValue: event.target.value, loading: true }, this.query);
+            this.setState({ inputValue: event.target.value, loading: true }, this.query)
           }}
           label="Search satellites"
           variant="outlined"
@@ -103,6 +103,6 @@ export class TleSelect extends React.Component<any, any> {
           }}
         />
       )}
-    />;
+    />
   }
 }

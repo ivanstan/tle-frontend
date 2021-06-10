@@ -1,16 +1,16 @@
-import React from "react";
+import React from "react"
 
 export class TleElementDetails extends React.Component<any, any> {
 
   render() {
-    const { title, color } = this.props;
+    const { title, color } = this.props
 
     let squareStyle: any = {
       width: 16,
       height: 16,
       backgroundColor: color,
       marginRight: 10,
-    };
+    }
 
     return (
       <>
@@ -21,7 +21,7 @@ export class TleElementDetails extends React.Component<any, any> {
           </div>
         </div>
       </>
-    );
+    )
   }
 
 }

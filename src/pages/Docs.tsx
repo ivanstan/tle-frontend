@@ -1,9 +1,9 @@
-import React from "react";
-import { RedocStandalone } from "redoc";
-import { isProduction } from "../util/common";
+import React from "react"
+import { RedocStandalone } from "redoc"
+import { isProduction } from "../util/common"
 
-const PRODUCTION_DOCS = 'https://tle.ivanstanojevic.me/api/tle.json';
-const DEVELOPMENT_DOCS = 'http://127.0.0.1:8000/api/tle.json';
+const PRODUCTION_DOCS = 'https://tle.ivanstanojevic.me/api/tle.json'
+const DEVELOPMENT_DOCS = 'http://127.0.0.1:8000/api/tle.json'
 
 export class Docs extends React.Component {
 
@@ -31,6 +31,6 @@ export class Docs extends React.Component {
           },
         }}
       />
-    </>;
+    </>
   }
 }

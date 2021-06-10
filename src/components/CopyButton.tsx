@@ -1,16 +1,16 @@
-import React from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { ClickAwayListener, IconButton, Tooltip } from "@material-ui/core";
+import React from "react"
+import { CopyToClipboard } from "react-copy-to-clipboard"
+import { ClickAwayListener, IconButton, Tooltip } from "@material-ui/core"
 
 export class CopyButton extends React.Component<any, any> {
 
   readonly state = {
     open: false
-  };
+  }
 
   render() {
-    const { open } = this.state;
-    const { value } = this.props;
+    const { open } = this.state
+    const { value } = this.props
 
     return (
       <ClickAwayListener onClickAway={() => this.setState({ open: false })}>
@@ -32,6 +32,6 @@ export class CopyButton extends React.Component<any, any> {
             </CopyToClipboard>
           </Tooltip>
       </ClickAwayListener>
-    );
+    )
   }
 }

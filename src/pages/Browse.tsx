@@ -1,36 +1,36 @@
-import React from "react";
-import { DataGrid, GridColDef } from '@material-ui/data-grid';
-import { Drawer, IconButton, InputAdornment, MenuItem, Select, TextField } from '@material-ui/core';
-import { TleProvider } from "tle-client";
-import { If } from "react-if";
-import { TleBrowser } from "../components/TleBrowser";
-import styled from "styled-components";
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import SearchIcon from '@material-ui/icons/Search';
-import { SatellitePosition } from "../components/SatellitePosition";
-import TleApi from "../services/TleApi";
+import React from "react"
+import { DataGrid, GridColDef } from '@material-ui/data-grid'
+import { Drawer, IconButton, InputAdornment, MenuItem, Select, TextField } from '@material-ui/core'
+import { TleProvider } from "tle-client"
+import { If } from "react-if"
+import { TleBrowser } from "../components/TleBrowser"
+import styled from "styled-components"
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import SearchIcon from '@material-ui/icons/Search'
+import { SatellitePosition } from "../components/SatellitePosition"
+import TleApi from "../services/TleApi"
 
 const Toolbar = styled.div`
-  padding: 10px 0;
-`;
+  padding: 10px 0
+`
 
 const DrawerHeader = styled.div`
-  padding: 20px;
-`;
+  padding: 20px
+`
 
 export const RETROGRADE = 'retrograde'
 export const POSIGRADE = 'posigrade'
 
 const formatTime = (seconds: number) => {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = Math.round(seconds % 60);
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  const s = Math.round(seconds % 60)
   return [
     h,
     m > 9 ? m : (h ? '0' + m : m || '0'),
     s > 9 ? s : '0' + s
-  ].filter(Boolean).join(':');
-};
+  ].filter(Boolean).join(':')
+}
 
 const columns: GridColDef[] = [
   {
@@ -49,7 +49,7 @@ const columns: GridColDef[] = [
     disableColumnMenu: true,
     filterable: true,
     valueGetter: (params) => {
-      return params.row.extra.inclination.toFixed(2) + '°';
+      return params.row.extra.inclination.toFixed(2) + '°'
     }
   },
   {
@@ -58,7 +58,7 @@ const columns: GridColDef[] = [
     type: 'float',
     width: 250,
     valueGetter: (params) => {
-      return params.row.extra.eccentricity;
+      return params.row.extra.eccentricity
     },
     disableColumnMenu: true,
     sortable: true
@@ -69,7 +69,7 @@ const columns: GridColDef[] = [
     type: 'float',
     width: 250,
     valueGetter: (params) => {
-      return (parseFloat(params.row.extra.semi_major_axis) / 1000).toFixed(2);
+      return (parseFloat(params.row.extra.semi_major_axis) / 1000).toFixed(2)
     },
     disableColumnMenu: true,
     sortable: true
@@ -80,7 +80,7 @@ const columns: GridColDef[] = [
     type: 'string',
     width: 250,
     valueGetter: (params) => {
-      return formatTime(params.row.extra.period);
+      return formatTime(params.row.extra.period)
     },
     disableColumnMenu: true,
     sortable: true
@@ -91,28 +91,28 @@ const columns: GridColDef[] = [
     type: 'string',
     width: 250,
     valueGetter: (params) => {
-      return params.row.extra.raan.toFixed(2) + '°';
+      return params.row.extra.raan.toFixed(2) + '°'
     },
     disableColumnMenu: true,
     sortable: true
   },
 
-];
+]
 
 const TleBrowserWrapper = styled.div`
-  padding: 20px;
-`;
+  padding: 20px
+`
 
 export class Browse extends React.Component<any, any> {
 
-  private static URL: string = "https://tle.ivanstanojevic.me";
+  private static URL: string = "https://tle.ivanstanojevic.me"
 
-  private provider: TleProvider;
+  private provider: TleProvider
 
   constructor(props: any) {
-    super(props);
+    super(props)
 
-    this.provider = new TleProvider();
+    this.provider = new TleProvider()
   }
 
   public readonly state: any = {
@@ -126,62 +126,62 @@ export class Browse extends React.Component<any, any> {
     open: false,
     current: null,
     propagation: null
-  };
+  }
 
   componentDidMount() {
-    this.collection();
+    this.collection()
   }
 
   public async collection(): Promise<any[]> {
 
     this.setState({
       loading: true,
-    });
+    })
 
-    let url: string = Browse.URL + '/api/tle';
+    let url: string = Browse.URL + '/api/tle'
 
-    const response = await fetch(url + '?' + new URLSearchParams(this.state.parameters).toString());
-    const data: any = await response.json();
+    const response = await fetch(url + '?' + new URLSearchParams(this.state.parameters).toString())
+    const data: any = await response.json()
 
-    const result: any[] = [];
+    const result: any[] = []
 
     if (result.hasOwnProperty('member')) {
-      return result;
+      return result
     }
 
     this.setState({
       data: data.member,
       total: data.totalItems,
       loading: false,
-    });
+    })
 
-    return data.member;
+    return data.member
   }
 
   handlePageChange = (event: any) => {
-    let parameters: any = this.state.parameters;
+    let parameters: any = this.state.parameters
 
-    parameters['page-size'] = event.pageSize;
+    parameters['page-size'] = event.pageSize
 
     if (event.page > 0) {
-      parameters['page'] = event.page;
+      parameters['page'] = event.page
     }
 
-    this.setState({ parameters: parameters }, this.collection);
-  };
+    this.setState({ parameters: parameters }, this.collection)
+  }
 
   handleSortModelChange = (event: any) => {
-    let parameters: any = this.state.parameters;
+    let parameters: any = this.state.parameters
 
     if (!event.sortModel.hasOwnProperty(0)) {
-      return;
+      return
     }
 
-    parameters['sort'] = event.sortModel[0].field;
-    parameters['sort-dir'] = event.sortModel[0].sort;
+    parameters['sort'] = event.sortModel[0].field
+    parameters['sort-dir'] = event.sortModel[0].sort
 
-    this.setState({ parameters: parameters }, this.collection);
-  };
+    this.setState({ parameters: parameters }, this.collection)
+  }
 
   handleModelSelectChange = (event: any) => {
     this.provider.get(event.selectionModel[0]).then(async (current) =>  {
@@ -207,24 +207,24 @@ export class Browse extends React.Component<any, any> {
     this.setState({
       open: !this.state.open
     })
-  };
+  }
 
   handleSearchChange = (event: any) => {
-    let value = event.target.value.trim();
+    let value = event.target.value.trim()
 
     if (value !== '') {
-      let parameters: any = this.state.parameters;
+      let parameters: any = this.state.parameters
 
-      parameters['search'] = value;
+      parameters['search'] = value
 
-      this.setState({ parameters: parameters }, this.collection);
+      this.setState({ parameters: parameters }, this.collection)
     }
   }
 
   handleInclinationFilter = (event: any): void => {
-    let value = event.target.value.trim();
+    let value = event.target.value.trim()
 
-    let parameters: any = this.state.parameters;
+    let parameters: any = this.state.parameters
 
     if (value === RETROGRADE) {
       parameters['inclination[gt]'] = 90
@@ -245,10 +245,10 @@ export class Browse extends React.Component<any, any> {
       orbitValue: value,
       parameters: parameters
     }, this.collection)
-  };
+  }
 
   render() {
-    const { orbitValue } = this.state;
+    const { orbitValue } = this.state
 
     return (
       <div style={{ height: 'calc(100% - 144px)', padding: 5 }}>
@@ -321,6 +321,6 @@ export class Browse extends React.Component<any, any> {
           </If>
         </Drawer>
       </div>
-    );
+    )
   }
 }

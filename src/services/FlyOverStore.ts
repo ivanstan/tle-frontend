@@ -1,6 +1,7 @@
-import { makeObservable, observable } from "mobx";
-import { promisedComputed } from "computed-async-mobx";
+import { makeObservable, observable } from "mobx"
+import { promisedComputed } from "computed-async-mobx"
 import TleApi from "../services/TleApi"
+import Observer from "./Observer"
 
 export class FlyOverStore {
 
@@ -9,12 +10,11 @@ export class FlyOverStore {
   }
 
   @observable
-  public tle: any;
+  public tle: any
 
   public flyovers = promisedComputed({}, async () => {
-
-    return await TleApi.flyOver(25544, { latitude: 0, longitude: 0 })
-  });
+    return await TleApi.flyOver(this.tle, Observer.position)
+  })
 
 }
 

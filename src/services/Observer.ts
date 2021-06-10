@@ -11,7 +11,7 @@ export class Observer {
     this.position = position
 
     this.persist()
-  };
+  }
 
   constructor() {
     this.position = {
@@ -41,16 +41,16 @@ export class Observer {
         resolve(defaultValue)
       })
     })
-  };
+  }
 
   protected restore = async (): Promise<any> => {
     let json = localStorage.getItem('observer') || '{}'
 
-    let data;
+    let data
     try {
       data = JSON.parse(json)
     } catch (e) {
-      data = {};
+      data = {}
     }
 
     let result = {
@@ -63,8 +63,8 @@ export class Observer {
       result.position = await this.getHtml5Geolocation(this.position)
     }
 
-    return new Promise(resolve => resolve(result))
-  };
+    return result
+  }
 
   protected persist = () => {
     const data = {
@@ -72,7 +72,7 @@ export class Observer {
     }
 
     localStorage.setItem('observer', JSON.stringify(data))
-  };
+  }
 }
 
 export default new Observer()

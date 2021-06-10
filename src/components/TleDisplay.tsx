@@ -1,15 +1,15 @@
-import React from "react";
-import { Tle } from "tle-client";
-import { CopyButton } from "./CopyButton";
+import React from "react"
+import { Tle } from "tle-client"
+import { CopyButton } from "./CopyButton"
 
 interface TleDisplayPropsInterface {
-  data: Tle;
+  data: Tle
 }
 
 export class TleDisplay extends React.Component<TleDisplayPropsInterface, any> {
 
   render() {
-    const { data } = this.props;
+    const { data } = this.props
 
     return (
       <div className="code tle-display d-flex justify-content-between">
@@ -24,6 +24,6 @@ export class TleDisplay extends React.Component<TleDisplayPropsInterface, any> {
           <CopyButton value={data.line1 + "\n" + data.line2}/>
         </div>
       </div>
-    );
+    )
   }
 }

@@ -1,4 +1,4 @@
-import { Tle } from "tle-client";
+import { Tle } from "tle-client"
 
 export enum LineNumber {
   LINE1 = 1,
@@ -110,7 +110,7 @@ export class TleParser extends Tle {
   }
 
   getPeriod(): number {
-    return 86400 / parseFloat(this.getMeanMotionRaw());
+    return 86400 / parseFloat(this.getMeanMotionRaw())
   }
 
   getRevolutionNumberRaw(): string {

@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { Line } from "react-chartjs-2";
+import React from "react"
+import styled from "styled-components"
+import { Line } from "react-chartjs-2"
 
 const Badge = styled.img`
-  margin-right: 5px;
-`;
+  margin-right: 5px
+`
 
 const options = {
   maintainAspectRatio: false,
@@ -15,7 +15,7 @@ const options = {
   legend: {
     display: false,
   },
-};
+}
 
 export class Health extends React.Component<any, any> {
 
@@ -24,24 +24,24 @@ export class Health extends React.Component<any, any> {
   componentDidMount() {
     this.getData().then(response => {
 
-      const labels: any[] = [];
+      const labels: any[] = []
       Object.keys(response).forEach(item => {
-        let dateObject: Date = new Date(Date.parse(item));
+        let dateObject: Date = new Date(Date.parse(item))
 
-        labels.push(dateObject.toLocaleString());
-      });
+        labels.push(dateObject.toLocaleString())
+      })
 
       this.setState({
         data: Object.values(response),
         labels: labels
       })
-    });
+    })
   }
 
   getData = async () => {
-    const response = await fetch('https://tle.ivanstanojevic.me/api/tle/hits');
-    return await response.json();
-  };
+    const response = await fetch('https://tle.ivanstanojevic.me/api/tle/hits')
+    return await response.json()
+  }
 
   render() {
     let data = {
@@ -53,7 +53,7 @@ export class Health extends React.Component<any, any> {
         borderColor: 'rgba(53, 134, 77, 1)',
         backgroundColor: 'rgba(53, 134, 77, 0.2)',
       }]
-    };
+    }
 
     return (
       <div className="container">
@@ -79,6 +79,6 @@ export class Health extends React.Component<any, any> {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }

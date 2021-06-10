@@ -1,23 +1,23 @@
-import React from 'react';
-import { HideOnScroll } from './HideOnScroll';
-import { AppBar, Button, Drawer, IconButton, Toolbar, Typography } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import styled from 'styled-components';
-import { DonateButton } from "./DonateButton";
+import React from 'react'
+import { HideOnScroll } from './HideOnScroll'
+import { AppBar, Button, Drawer, IconButton, Toolbar, Typography } from '@material-ui/core'
+import MenuIcon from '@material-ui/icons/Menu'
+import styled from 'styled-components'
+import { DonateButton } from "./DonateButton"
 
 const Menu = styled.div`
-  background: #0b3d91;
-  display: flex;
-  flex-direction: column;
-  align-items: baseline;
-  padding: 15px;
-`;
+  background: #0b3d91
+  display: flex
+  flex-direction: column
+  align-items: baseline
+  padding: 15px
+`
 
 export class Navigation extends React.Component<any, any> {
 
   public readonly state = {
     open: false,
-  };
+  }
 
   toggleMenu = () => {
     this.setState({
@@ -41,7 +41,7 @@ export class Navigation extends React.Component<any, any> {
           Health
         </Button>
       </>
-    );
+    )
 
     return (
       <HideOnScroll {...this.props}>
@@ -90,6 +90,6 @@ export class Navigation extends React.Component<any, any> {
         </AppBar>
 
        </HideOnScroll>
-    );
+    )
   }
 }

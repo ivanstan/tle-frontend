@@ -1,10 +1,10 @@
-import React from "react";
-import { GeoMap } from "./GeoMap";
-import Marker from "react-google-maps/lib/components/Marker";
-import { If } from "react-if";
-import Polyline from "react-google-maps/lib/components/Polyline";
+import React from "react"
+import { GeoMap } from "./GeoMap"
+import Marker from "react-google-maps/lib/components/Marker"
+import { If } from "react-if"
+import Polyline from "react-google-maps/lib/components/Polyline"
 
-const icon = new google.maps.MarkerImage('/images/marker.svg', null, null, new google.maps.Point(15, 15), new google.maps.Size(30, 30));
+const icon = new google.maps.MarkerImage('/images/marker.svg', null, null, new google.maps.Point(15, 15), new google.maps.Size(30, 30))
 
 export class SatellitePosition extends React.Component<any, any> {
 
@@ -14,7 +14,7 @@ export class SatellitePosition extends React.Component<any, any> {
   }
 
   shouldComponentUpdate(nextProps: Readonly<any>, nextState: Readonly<any>, nextContext: any): boolean {
-    return this.state.satelliteId !== nextProps.satelliteId;
+    return this.state.satelliteId !== nextProps.satelliteId
   }
 
   static getDerivedStateFromProps(props: any) {
@@ -25,7 +25,7 @@ export class SatellitePosition extends React.Component<any, any> {
   }
 
   render() {
-    const { propagation } = this.state;
+    const { propagation } = this.state
 
     return <>
       <GeoMap
@@ -53,6 +53,6 @@ export class SatellitePosition extends React.Component<any, any> {
           {propagation.tle.name} position on {propagation.parameters.date}
         </span>
       </If>
-    </>;
+    </>
   }
 }
