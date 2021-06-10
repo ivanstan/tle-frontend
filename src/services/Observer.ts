@@ -1,24 +1,17 @@
-
 import { LatLng } from "../model/LatLng"
-import { action, computed, makeObservable, observable } from "mobx"
-
-const defaultObserverPosition: LatLng = {
-  latitude: 0,
-  longitude: 0,
-}
-
-const localStorageObserver = 'observer'
+import { action, makeObservable, observable } from "mobx"
 
 export class Observer {
 
-  @observable public position: LatLng
+  @observable
+  public position: LatLng
 
   @action
-  setPosition(position: LatLng) {
+  setPosition = (position: LatLng) => {
     this.position = position
 
     this.persist()
-  }
+  };
 
   constructor() {
     this.position = {
@@ -26,10 +19,14 @@ export class Observer {
       longitude: 0
     }
 
+    this.restore().then(data => {
+      this.position = data.position
+    })
+
     makeObservable(this)
   }
 
-  getHtml5Geolocation(defaultValue: LatLng): Promise<LatLng> {
+  protected getHtml5Geolocation = (defaultValue: LatLng): Promise<LatLng> => {
     if (!navigator.geolocation) {
       return new Promise(resolve => resolve(defaultValue))
     }
@@ -44,35 +41,38 @@ export class Observer {
         resolve(defaultValue)
       })
     })
-  }
+  };
 
-  async get(): Promise<any> {
-    let json = localStorage.getItem(localStorageObserver) || '{}'
-    let observer = JSON.parse(json)
+  protected restore = async (): Promise<any> => {
+    let json = localStorage.getItem('observer') || '{}'
 
-    let newObserver = defaultObserverPosition
-
-    if (Object.keys(observer).length === 0) {
-      let location = await this.getHtml5Geolocation(defaultObserverPosition)
-      newObserver = { ...location }
-    } else {
-      newObserver = {
-        latitude: observer.latitude,
-        longitude: observer.longitude,
-      }
+    let data;
+    try {
+      data = JSON.parse(json)
+    } catch (e) {
+      data = {};
     }
 
-    return new Promise(resolve => resolve(
-      {
-        latitude: newObserver.latitude,
-        longitude: newObserver.longitude,
-      }
-    ))
-  }
+    let result = {
+      position: this.position
+    }
 
-  private persist() {
+    if (data.hasOwnProperty('position')) {
+      result.position = data.position
+    } else {
+      result.position = await this.getHtml5Geolocation(this.position)
+    }
 
-  }
+    return new Promise(resolve => resolve(result))
+  };
+
+  protected persist = () => {
+    const data = {
+      position: this.position,
+    }
+
+    localStorage.setItem('observer', JSON.stringify(data))
+  };
 }
 
 export default new Observer()

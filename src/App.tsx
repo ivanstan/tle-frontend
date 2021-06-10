@@ -12,6 +12,7 @@ import { isProduction } from "./util/common";
 import { FlyOver } from "./pages/FlyOver";
 import { Provider } from 'mobx-react';
 import Observer from "./services/Observer";
+import FlyOverStore from "./services/FlyOverStore";
 
 const theme = createMuiTheme({
   palette: {
@@ -36,7 +37,7 @@ function App() {
   return (
     <Sentry.ErrorBoundary fallback={"An error has occurred"}>
       <ThemeProvider theme={theme}>
-        <Provider observer={Observer}>
+        <Provider observer={Observer} flyOverStore={FlyOverStore}>
           <Router>
             <Navigation/>
             <Switch>

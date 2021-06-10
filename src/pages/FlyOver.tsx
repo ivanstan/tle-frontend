@@ -8,6 +8,7 @@ import { formatDiff, fromAtom } from "../util/date"
 import { inject, observer } from "mobx-react";
 import { RouteComponentProps } from "react-router";
 import { Observer } from "../services/Observer"
+import { FlyOverStore } from "../services/FlyOverStore";
 
 interface FlyOverStateInterface extends AbstractTlePageStateInterface {
   flyOver?: any,
@@ -18,10 +19,11 @@ type RouteParams = {
 }
 
 interface FlyOverPropsInterface extends RouteComponentProps<RouteParams> {
-  observer: Observer
+  observer: Observer,
+  flyOverStore: FlyOverStore
 }
 
-@inject('observer')
+@inject('observer', 'flyOverStore')
 @observer
 export class FlyOver extends React.Component<any, any> {
 
@@ -41,7 +43,7 @@ export class FlyOver extends React.Component<any, any> {
   async componentDidMount() {
     const { id } = this.props.match.params;
 
-    const { observer } = this.props
+    const { observer, flyoverStore } = this.props
 
     let tle = await this.provider.get(parseInt(id))
 
@@ -66,9 +68,6 @@ export class FlyOver extends React.Component<any, any> {
   }
 
   componentWillReceiveProps(nextProps: any) {
-
-    console.log(nextProps)
-
     if (nextProps.match.params.id !== this.props.match.params.id) {
       const { id } = nextProps.match.params
 

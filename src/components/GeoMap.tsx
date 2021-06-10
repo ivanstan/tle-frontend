@@ -1,14 +1,14 @@
-import React from "react";
-import { styles } from "../util/map";
+import React from "react"
+import { styles } from "../util/map"
 import { GoogleMap, withGoogleMap } from "react-google-maps"
-import Marker from "react-google-maps/lib/components/Marker";
-import { If } from "react-if";
-import { Observer } from "../services/Observer";
-import { inject } from "mobx-react";
+import Marker from "react-google-maps/lib/components/Marker"
+import { If } from "react-if"
+import { Observer } from "../services/Observer"
+import { inject } from "mobx-react"
 
 interface GeoMapPropsInterface {
-  zoom?: number;
-  renderObserver?: boolean;
+  zoom?: number
+  renderObserver?: boolean
   observer?: Observer
 }
 
@@ -19,24 +19,21 @@ interface GeoMapStateInterface {
 @inject('observer')
 class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateInterface> {
 
-  private _map: any;
+  private _map: any
 
   onObserverDragEnd = (event: any): void => {
-    const { observer } = this.props;
-
-    const lat = event.latLng.lat();
-    const lng = event.latLng.lng();
+    const { observer } = this.props
 
     if (observer) {
       observer.setPosition({
-        latitude: lat,
-        longitude: lng,
-      });
+        latitude: event.latLng.lat(),
+        longitude: event.latLng.lng(),
+      })
     }
-  };
+  }
 
   render() {
-    let { zoom, renderObserver, observer } = this.props;
+    let { zoom, renderObserver, observer } = this.props
 
     return (
       <GoogleMap
@@ -67,8 +64,8 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
           />
         </If>
       </GoogleMap>
-    );
+    )
   }
 }
 
-export const GeoMap = withGoogleMap(CustomGoogleMap);
+export const GeoMap = withGoogleMap(CustomGoogleMap)
