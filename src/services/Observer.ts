@@ -1,33 +1,32 @@
-import { Observer } from "../model/Observer";
-import { LatLng } from "../model/LatLng";
-import { action, makeObservable, observable } from "mobx";
+
+import { LatLng } from "../model/LatLng"
+import { action, computed, makeObservable, observable } from "mobx"
 
 const defaultObserverPosition: LatLng = {
   latitude: 0,
   longitude: 0,
-};
+}
 
-const localStorageObserver = 'observer';
+const localStorageObserver = 'observer'
 
-export class ObserverService {
+export class Observer {
 
-
-
-  public observer: Observer;
-
-  @observable public latitude: number = 0;
+  @observable public position: LatLng
 
   @action
-  setLatitude(lat: number) {
+  setPosition(position: LatLng) {
+    this.position = position
 
-    console.log(lat);
-
-    this.latitude = lat
+    this.persist()
   }
 
   constructor() {
+    this.position = {
+      latitude: 0,
+      longitude: 0
+    }
+
     makeObservable(this)
-    this.observer = new Observer();
   }
 
   getHtml5Geolocation(defaultValue: LatLng): Promise<LatLng> {
@@ -47,11 +46,11 @@ export class ObserverService {
     })
   }
 
-  async get(): Promise<Observer> {
-    let json = localStorage.getItem(localStorageObserver) || '{}';
-    let observer = JSON.parse(json);
+  async get(): Promise<any> {
+    let json = localStorage.getItem(localStorageObserver) || '{}'
+    let observer = JSON.parse(json)
 
-    let newObserver: Observer = defaultObserverPosition;
+    let newObserver = defaultObserverPosition
 
     if (Object.keys(observer).length === 0) {
       let location = await this.getHtml5Geolocation(defaultObserverPosition)
@@ -68,18 +67,12 @@ export class ObserverService {
         latitude: newObserver.latitude,
         longitude: newObserver.longitude,
       }
-    ));
+    ))
   }
 
-  set(observer: Observer) {
-    localStorage.setItem(localStorageObserver, JSON.stringify(observer));
-  }
+  private persist() {
 
-  public static initial(): Observer {
-    return {
-      ...defaultObserverPosition
-    }
   }
 }
 
-export default new ObserverService();
+export default new Observer()

@@ -3,73 +3,40 @@ import { styles } from "../util/map";
 import { GoogleMap, withGoogleMap } from "react-google-maps"
 import Marker from "react-google-maps/lib/components/Marker";
 import { If } from "react-if";
-import { LatLng } from "../model/LatLng";
-import { Observer } from "../model/Observer";
-import { ObserverService, default as ObserverServiceInstance } from "../services/ObserverService";
+import { Observer } from "../services/Observer";
+import { inject } from "mobx-react";
 
 interface GeoMapPropsInterface {
   zoom?: number;
   renderObserver?: boolean;
-  onObserverPositionChange?: Function;
-  observer?: Observer;
-}
-
-interface GeoMapStateInterface {
   observer?: Observer
 }
 
+interface GeoMapStateInterface {
 
+}
+
+@inject('observer')
 class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateInterface> {
-
-  readonly state = {
-    observer: ObserverService.initial()
-  }
 
   private _map: any;
 
-  componentDidMount() {
+  onObserverDragEnd = (event: any): void => {
     const { observer } = this.props;
 
-    if (observer) {
-      this.callOnObserverPositionChange(observer.latitude, observer.longitude)
-    }
-  }
-
-  onObserverDragEnd = (event: any): void => {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
 
-    ObserverServiceInstance.setLatitude(event.latLng.lat());
-
-    const observer: LatLng = {
-      latitude: lat,
-      longitude: lng,
-    };
-
-    this.setState({
-      observer: observer,
-    })
-
-    this.callOnObserverPositionChange(lat, lng);
-  };
-
-  callOnObserverPositionChange = (lat: number, lng: number) => {
-    const { onObserverPositionChange } = this.props;
-
-    if (typeof onObserverPositionChange === 'function') {
-      onObserverPositionChange({
-        lat: lat,
-        lng: lng
+    if (observer) {
+      observer.setPosition({
+        latitude: lat,
+        longitude: lng,
       });
     }
   };
 
   render() {
     let { zoom, renderObserver, observer } = this.props;
-
-    if (!observer) {
-      observer = ObserverService.initial();
-    }
 
     return (
       <GoogleMap
@@ -92,8 +59,12 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
         }}
       >
         {this.props.children}
-        <If condition={renderObserver}>
-          <Marker position={{ lat: observer.latitude, lng: observer.longitude }} draggable={true} onDragEnd={this.onObserverDragEnd}/>
+        <If condition={renderObserver && observer !== undefined}>
+          <Marker
+            position={{ lat: observer.position.latitude, lng: observer.position.longitude }}
+            draggable={true}
+            onDragEnd={this.onObserverDragEnd}
+          />
         </If>
       </GoogleMap>
     );

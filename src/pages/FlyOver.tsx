@@ -7,7 +7,7 @@ import { Link, List, ListItem, ListItemText } from "@material-ui/core"
 import { formatDiff, fromAtom } from "../util/date"
 import { inject, observer } from "mobx-react";
 import { RouteComponentProps } from "react-router";
-import { ObserverService, default as ObserverServiceInstance } from "../services/ObserverService"
+import { Observer } from "../services/Observer"
 
 interface FlyOverStateInterface extends AbstractTlePageStateInterface {
   flyOver?: any,
@@ -18,9 +18,10 @@ type RouteParams = {
 }
 
 interface FlyOverPropsInterface extends RouteComponentProps<RouteParams> {
-  ObserverService: ObserverService
+  observer: Observer
 }
 
+@inject('observer')
 @observer
 export class FlyOver extends React.Component<any, any> {
 
@@ -40,13 +41,13 @@ export class FlyOver extends React.Component<any, any> {
   async componentDidMount() {
     const { id } = this.props.match.params;
 
-    const { ObserverService } = this.props
+    const { observer } = this.props
 
     let tle = await this.provider.get(parseInt(id))
 
     let flyOver = null
     if (tle) {
-      flyOver = await TleApi.flyOver(tle, ObserverServiceInstance.observer)
+      flyOver = await TleApi.flyOver(tle, observer.position)
     }
 
     this.setState({ flyOver: flyOver, data: tle });
@@ -81,6 +82,7 @@ export class FlyOver extends React.Component<any, any> {
 
   render() {
     const { flyOver, data } = this.state
+    const { observer } = this.props
 
     if (!flyOver) {
       return null
@@ -100,7 +102,7 @@ export class FlyOver extends React.Component<any, any> {
               mapElement={<div style={{ height: 400 }}/>}
             />
             <span style={{ fontSize: 12 }}>
-              {ObserverServiceInstance.latitude}
+              {observer.position.latitude}
 
               * Drag marker to set your location
             </span>

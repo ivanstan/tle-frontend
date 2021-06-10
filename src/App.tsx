@@ -11,7 +11,7 @@ import * as Sentry from "@sentry/react";
 import { isProduction } from "./util/common";
 import { FlyOver } from "./pages/FlyOver";
 import { Provider } from 'mobx-react';
-import ObserverService from "./services/ObserverService";
+import Observer from "./services/Observer";
 
 const theme = createMuiTheme({
   palette: {
@@ -36,7 +36,7 @@ function App() {
   return (
     <Sentry.ErrorBoundary fallback={"An error has occurred"}>
       <ThemeProvider theme={theme}>
-        <Provider ObserverService={ObserverService}>
+        <Provider observer={Observer}>
           <Router>
             <Navigation/>
             <Switch>
