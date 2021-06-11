@@ -66,7 +66,7 @@ export class Observer {
     return result
   }
 
-  protected persist = () => {
+  protected persist = (): void => {
     const data = {
       position: this.position,
     }

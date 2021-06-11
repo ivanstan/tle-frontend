@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch, withRouter } from 'react-router-dom';
 import { Home } from "./pages/Home";
 import { Docs } from "./pages/Docs";
 import { Navigation } from "./components/Navigation";
@@ -13,6 +13,7 @@ import { FlyOver } from "./pages/FlyOver";
 import { Provider } from 'mobx-react';
 import Observer from "./services/Observer";
 import FlyOverStore from "./services/FlyOverStore";
+import { GoogleAnalytics } from "./GoogleAnalytics";
 
 const theme = createMuiTheme({
   palette: {
@@ -54,6 +55,7 @@ function App() {
 
               <Route path="/map" exact component={Map}/>
             </Switch>
+            <Route path="/" component={GoogleAnalytics}/>
           </Router>
         </Provider>
       </ThemeProvider>
@@ -61,4 +63,4 @@ function App() {
   );
 }
 
-export default App;
+export default App

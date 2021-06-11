@@ -17,26 +17,26 @@ interface HomeStateInterface extends AbstractTlePageStateInterface {
 }
 
 const PopularWrapper = styled.div`
-  margin-bottom: 20px
+  margin-bottom: 20px;
 
-  display: grid
-  grid-template-columns: repeat(auto-fill,minmax(260px, 5fr))
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(260px, 5fr));
 
   @media ${device.tablet} { 
-    margin-right: 100px
-    margin-left: 100px
+    margin-right: 100px;
+    margin-left: 100px;
   }
 
   @media ${device.laptop} { 
-    margin-right: 100px
-    margin-left: 100px
+    margin-right: 100px;
+    margin-left: 100px;
   }
 `
 
 const CenterTitle = styled.p`
-  font-weight: bold
-  text-align: center
-  margin-bottom: 40px
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40px;
 `
 
 const PopularItemWrapper = styled.div``
@@ -105,9 +105,9 @@ export class Home extends AbstractTlePage<any, HomeStateInterface> {
               <p className={'py-4'}>
                 API provides up to date NORAD two line element sets for number of Earth orbiting satellites. Data is
                 provided
-                by&nbsp<a href={"https://celestrak.com/"}
+                by&nbsp;<a href={"https://celestrak.com/"}
                            target="_blank"
-                           rel="nofollow">CelesTrak</a>&nbspand served in web application friendly JSON format.
+                           rel="nofollow">CelesTrak</a>&nbsp;and served in web application friendly JSON format.
 
                 A two-line element set (TLE) is a data format encoding of orbital elements of an Earth-orbiting
                 object for a given point in time.
