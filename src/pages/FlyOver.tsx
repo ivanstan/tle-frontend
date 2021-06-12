@@ -61,7 +61,6 @@ export class FlyOver extends React.Component<FlyOverPropsInterface, any> {
 
     let observerTime = fromAtom(flyovers.observer.date)
 
-
     return (
       <div className={'d-flex p-4'}>
         <div className={'flex-grow-1 d-flex'}>
@@ -72,35 +71,45 @@ export class FlyOver extends React.Component<FlyOverPropsInterface, any> {
               mapElement={<div style={{ height: 400 }}/>}
             />
             <span style={{ fontSize: 12 }}>
-              {observer.position.latitude}
-
-              * Drag marker to set your location
+              * Drag marker to change your location
             </span>
           </div>
         </div>
 
         <div className={'flex-grow-1'} style={{ paddingLeft: 24 }}>
+
+          <div style={{paddingLeft: 16, paddingRight: 16}}>
+            <h1 className="h5">
+              Visible flyovers for location
+            </h1>
+            <h5>[ latitude: {observer.position.latitude.toFixed(2)}°,
+              longitude: {observer.position.longitude.toFixed(2)}° ]</h5>
+          </div>
+
           <List dense>
             {
               flyovers.member.map((element: any, index: number) => {
-                let flyOverTime = fromAtom(element.aos.date)
+                let aosTime = fromAtom(element.aos.date)
+                let losTime = fromAtom(element.los.date)
 
-                let diff = flyOverTime.diff(observerTime, ['days', 'hours', 'minutes', 'seconds'])
+                let diff = aosTime.diff(observerTime, ['days', 'hours', 'minutes', 'seconds'])
 
                 let params = new URLSearchParams({
                   'id[]': flyOverStore.tle,
-                  'date': element.aos.date,
+                  'date': element.max.date,
                 })
 
                 let mapLink = '#/map?' + decodeURIComponent(params.toString())
 
-                return <ListItem key={index}>
-                  <ListItemText
-                    primary={'AOS ' + flyOverTime.toFormat('HH:mm:ss yyyy-MM-dd ZZ')}
-                    secondary={formatDiff(diff)}
-                  />
-                  <Link href={mapLink}>View map</Link>
-                </ListItem>
+                return (
+                  <ListItem key={index}>
+                    <ListItemText
+                      primary={'AOS ' + aosTime.toFormat('HH:mm:ss yyyy-MM-dd ZZ')}
+                      secondary={formatDiff(diff)}
+                    />
+                    <Link href={mapLink}>View map</Link>
+                  </ListItem>
+                )
               })}
           </List>
         </div>
