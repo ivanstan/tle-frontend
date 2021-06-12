@@ -34,6 +34,21 @@ const formatTime = (seconds: number) => {
 
 const columns: GridColDef[] = [
   {
+    field: 'actions',
+    headerName: 'Actions',
+    type: 'string',
+    width: 100,
+    disableColumnMenu: true,
+    disableClickEventBubbling: true,
+    renderCell: (params) => {
+      return (
+        <a href={`#/tle/${params.row.satelliteId}/flyover`}>
+          <img width={20} height={20} src={'images/satellite-icon.svg'}/>
+        </a>
+      )
+    }
+  },
+  {
     field: 'name',
     headerName: 'Name',
     type: 'string',

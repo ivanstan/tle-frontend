@@ -3,7 +3,7 @@ import { TleSelect } from "../components/TleSelect"
 import { Tle } from "tle-client"
 import { TleBrowser } from "../components/TleBrowser"
 import { TlePopularProvider } from "../services/TlePopularProvider"
-import { Link } from "@material-ui/core"
+import { Button, Link, Typography } from "@material-ui/core"
 import styled from "styled-components"
 import { device } from "../util/responsive"
 import Satellite from "../services/Satellite"
@@ -136,8 +136,19 @@ export class Home extends AbstractTlePage<any, HomeStateInterface> {
             </div>
 
             {data?.name && <div className="slide">
-              <h2 className="pb-4">{data.name}</h2>
-              <p className="pb-2">Latest two line element data for selected satellite</p>
+              <h2>{data.name}</h2>
+
+              <div className={'d-flex justify-center'}>
+                <Link href={`#/tle/${data.satelliteId}/flyover`} className={'my-4 mx-auto'}>
+                  <Button variant={'contained'}>
+                    <Typography color={'primary'}>
+                      {data.name} flyovers for your location
+                    </Typography>
+                  </Button>
+                </Link>
+              </div>
+
+              <p className="pb-1">Latest two line element data for selected satellite</p>
 
               <TleBrowser data={data}/>
 

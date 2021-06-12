@@ -6,6 +6,7 @@ import { FlyOverStore } from "../services/FlyOverStore"
 import { formatDiff, fromAtom } from "../util/date"
 import { GeoMap } from "../components/GeoMap"
 import { Link, List, ListItem, ListItemText } from "@material-ui/core"
+import { If } from "react-if";
 
 type RouteParams = {
   id: string
@@ -80,7 +81,7 @@ export class FlyOver extends React.Component<FlyOverPropsInterface, any> {
 
           <div style={{paddingLeft: 16, paddingRight: 16}}>
             <h1 className="h5">
-              Visible flyovers for location
+              {flyovers.tle.name} visible flyovers for location
             </h1>
             <h5>[ latitude: {observer.position.latitude.toFixed(2)}°,
               longitude: {observer.position.longitude.toFixed(2)}° ]</h5>
@@ -107,10 +108,17 @@ export class FlyOver extends React.Component<FlyOverPropsInterface, any> {
                       primary={'AOS ' + aosTime.toFormat('HH:mm:ss yyyy-MM-dd ZZ')}
                       secondary={formatDiff(diff)}
                     />
-                    <Link href={mapLink}>View map</Link>
+                    {/*<Link href={mapLink}>View map</Link>*/}
                   </ListItem>
                 )
-              })}
+              })
+            }
+
+            <If condition={flyovers.member.length === 0}>
+              <ListItem>
+                No flyovers found here.
+              </ListItem>
+            </If>
           </List>
         </div>
       </div>
