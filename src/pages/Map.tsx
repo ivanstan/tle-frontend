@@ -5,6 +5,10 @@ import { fromAtom, toAtom } from "../util/date"
 import { GeoMap } from "../components/GeoMap"
 import Marker from "react-google-maps/lib/components/Marker"
 import { RouteComponentProps } from "react-router";
+import SatelliteMarker from "../components/SatelliteMarker";
+import { TleApi } from "../services/TleApi";
+import { If } from "react-if";
+import Polyline from "react-google-maps/lib/components/Polyline";
 
 interface MapPropsInterface extends RouteComponentProps {
 
@@ -13,13 +17,15 @@ interface MapPropsInterface extends RouteComponentProps {
 export class Map extends React.Component<MapPropsInterface> {
 
   state = {
-    markers: []
+    satellites: []
   }
 
   async componentDidMount() {
     const params = new URLSearchParams(this.props.location.search)
 
     const dateParam = params.get('date') || toAtom(new Date())
+
+    console.log(dateParam)
 
     let result1 = await fetch('https://tle.ivanstanojevic.me/api/tle/25544/propagate?date=' + dateParam)
     let response1 = await result1.json()
@@ -38,30 +44,52 @@ export class Map extends React.Component<MapPropsInterface> {
     const positionGd = satellite.eciToGeodetic(positionEci, gmst)
 
     this.setState({
-      markers: [
+      satellites: [
         {
-          lat: response1.geodetic.latitude,
-          lng: response1.geodetic.longitude,
+          marker: {
+            lat: response1.geodetic.latitude,
+            lng: response1.geodetic.longitude,
+          }
         },
         {
-          lat: positionGd.latitude * 180 / Math.PI,
-          lng: positionGd.longitude * 180 / Math.PI,
-        }
+          groundTracks: TleApi.groundTracks(response2, date),
+          marker: {
+            lat: positionGd.latitude * 180 / Math.PI,
+            lng: positionGd.longitude * 180 / Math.PI,
+          }
+        },
       ],
     })
   }
 
-
   render() {
-    const { markers } = this.state
+    const { satellites } = this.state
 
     return (
       <div>
         <GeoMap
+          zoom={2}
           containerElement={<div style={{ height: window.innerHeight - 64, width: '100%' }}/>}
           mapElement={<div style={{ height: `100%` }}/>}
         >
-          {markers.map((marker: any) => <Marker position={{ lat: marker.lat, lng: marker.lng }}/>)}
+          {satellites.map((satellite: any) => (
+              <>
+                <If condition={satellite.groundTracks}>
+                  <Polyline
+                    path={satellite.groundTracks}
+                    options={{
+                      strokeColor: "#74BD8C",
+                      strokeOpacity: 0.75,
+                      strokeWeight: 2,
+                    }}
+                  />
+                </If>
+                <If condition={satellite.marker}>
+                  <Marker position={{ lat: satellite.marker.lat, lng: satellite.marker.lng }} icon={SatelliteMarker}/>
+                </If>
+              </>
+            )
+          )}
         </GeoMap>
       </div>
     )
