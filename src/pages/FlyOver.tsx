@@ -88,10 +88,11 @@ export class FlyOver extends React.Component<FlyOverPropsInterface, any> {
                 let diff = flyOverTime.diff(observerTime, ['days', 'hours', 'minutes', 'seconds'])
 
                 let params = new URLSearchParams({
-                  'id[]': element.satelliteId,
+                  'id[]': flyOverStore.tle,
                   'date': element.aos.date,
                 })
-                let mapLink = '#/map?' + params.toString()
+
+                let mapLink = '#/map?' + decodeURIComponent(params.toString())
 
                 return <ListItem key={index}>
                   <ListItemText
