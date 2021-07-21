@@ -11,6 +11,8 @@ export class GoogleAnalytics extends React.Component<any, any> {
   onRouteChanged() {
     const { history } = this.props
 
+    console.log(history);
+
     // @ts-ignore
     const gtag = window.gtag;
 

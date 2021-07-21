@@ -40,6 +40,7 @@ const columns: GridColDef[] = [
     width: 100,
     disableColumnMenu: true,
     disableClickEventBubbling: true,
+    sortable: false,
     renderCell: (params) => {
       return (
         <a href={`#/tle/${params.row.satelliteId}/flyover`}>
