@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Toolbar, Typography } from "@material-ui/core"
+import { Button, Typography } from "@material-ui/core"
 
 export const DonateButton = () => {
   return (

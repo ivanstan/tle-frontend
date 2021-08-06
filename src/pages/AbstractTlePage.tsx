@@ -1,6 +1,5 @@
 import React from "react"
-import { TleProvider } from "tle-client"
-import { Tle } from "tle-client"
+import { Tle, TleProvider } from "tle-client"
 import { RouteComponentProps } from "react-router"
 
 export interface AbstractTlePageStateInterface {

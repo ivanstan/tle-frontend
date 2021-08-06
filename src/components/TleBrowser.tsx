@@ -142,7 +142,7 @@ export class TleBrowser extends React.Component<any, any> {
         <span className={"d-none d-md-inline"}>Get daily updates for {data.name} using following API endpoint&nbsp;</span>
         <a
           target="_blank"
-          rel="nofollow"
+          rel="nofollow noreferrer"
           href={'https://tle.ivanstanojevic.me/api/tle/' + data.satelliteId}>https://tle.ivanstanojevic.me/api/tle/{data.satelliteId}</a>
       </div>
 

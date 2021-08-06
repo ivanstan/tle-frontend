@@ -107,7 +107,7 @@ export class Home extends AbstractTlePage<any, HomeStateInterface> {
                 provided
                 by&nbsp;<a href={"https://celestrak.com/"}
                            target="_blank"
-                           rel="nofollow">CelesTrak</a>&nbsp;and served in web application friendly JSON format.
+                           rel="nofollow noreferrer">CelesTrak</a>&nbsp;and served in web application friendly JSON format.
 
                 A two-line element set (TLE) is a data format encoding of orbital elements of an Earth-orbiting
                 object for a given point in time.

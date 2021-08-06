@@ -92,6 +92,7 @@ export class FlyOver extends React.Component<FlyOverPropsInterface, any> {
               flyovers.member.map((element: any, index: number) => {
                 let aosTime = fromAtom(element.aos.date)
                 let losTime = fromAtom(element.los.date)
+                let maxTime = fromAtom(element.max.date)
 
                 let diff = aosTime.diff(observerTime, ['days', 'hours', 'minutes', 'seconds'])
 

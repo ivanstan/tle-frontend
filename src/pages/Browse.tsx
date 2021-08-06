@@ -44,7 +44,7 @@ const columns: GridColDef[] = [
     renderCell: (params) => {
       return (
         <a href={`#/tle/${params.row.satelliteId}/flyover`}>
-          <img width={20} height={20} src={'images/satellite-icon.svg'}/>
+          <img width={20} height={20} src={'images/satellite-icon.svg'} alt={'Flyover'}/>
         </a>
       )
     }
