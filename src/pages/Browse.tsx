@@ -1,24 +1,24 @@
-import React from "react"
-import { DataGrid, GridColDef } from '@material-ui/data-grid'
-import { Drawer, IconButton, InputAdornment, MenuItem, Select, TextField } from '@material-ui/core'
-import { TleProvider } from "tle-client"
-import { If } from "react-if"
-import { TleBrowser } from "../components/TleBrowser"
-import styled from "styled-components"
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
-import SearchIcon from '@material-ui/icons/Search'
-import { SatellitePosition } from "../components/SatellitePosition"
-import TleApi from "../services/TleApi"
+import React from 'react';
+import { DataGrid, GridColDef } from '@material-ui/data-grid';
+import { Drawer, IconButton, InputAdornment, MenuItem, Select, TextField, Tooltip } from '@material-ui/core';
+import { TleProvider } from 'tle-client';
+import { If } from 'react-if';
+import { TleBrowser } from '../components/TleBrowser';
+import styled from 'styled-components';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import SearchIcon from '@material-ui/icons/Search';
+import { SatellitePosition } from '../components/SatellitePosition';
+import TleApi from '../services/TleApi';
 
 const Toolbar = styled.div`
   padding: 10px 0
-`
+`;
 
 const DrawerHeader = styled.div`
   padding: 20px
-`
+`;
 
-export const RETROGRADE = 'retrograde'
+export const RETROGRADE = 'retrograde';
 export const POSIGRADE = 'posigrade'
 
 const formatTime = (seconds: number) => {
@@ -43,9 +43,11 @@ const columns: GridColDef[] = [
     sortable: false,
     renderCell: (params) => {
       return (
-        <a href={`#/tle/${params.row.satelliteId}/flyover`}>
-          <img width={20} height={20} src={'images/satellite-icon.svg'} alt={'Flyover'}/>
-        </a>
+        <Tooltip title={'Flyover'} placement='right'>
+          <a href={`#/tle/${params.row.satelliteId}/flyover`}>
+            <img width={25} height={25} src={'images/satellite.svg'} alt={'Flyover'} />
+          </a>
+        </Tooltip>
       )
     }
   },

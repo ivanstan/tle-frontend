@@ -3,7 +3,7 @@ import { GeoMap } from "./GeoMap"
 import Marker from "react-google-maps/lib/components/Marker"
 import { If } from "react-if"
 import Polyline from "react-google-maps/lib/components/Polyline"
-import SatelliteMarker from "./SatelliteMarker";
+import SatelliteMarker from "./icons/SatelliteMarker";
 
 export class SatellitePosition extends React.Component<any, any> {
 

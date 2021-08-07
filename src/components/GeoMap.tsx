@@ -5,6 +5,7 @@ import Marker from "react-google-maps/lib/components/Marker"
 import { If } from "react-if"
 import { Observer } from "../services/Observer"
 import { inject } from "mobx-react"
+import ObserverIcon from "./icons/ObserverIcon"
 
 interface GeoMapPropsInterface {
   zoom?: number
@@ -32,6 +33,14 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
     }
   }
 
+  onClick = (event: any): void => {
+    let { renderObserver } = this.props
+
+    if (renderObserver) {
+      this.onObserverDragEnd(event);
+    }
+  };
+
   render() {
     let { zoom, renderObserver, observer } = this.props
 
@@ -45,6 +54,7 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
         ref={(map) => this._map = map}
         defaultCenter={{ lat: -10, lng: 8 }}
         defaultZoom={zoom || 1}
+        onClick={this.onClick}
         defaultOptions={{
           styles: styles,
           streetViewControl: false,
@@ -66,6 +76,7 @@ class CustomGoogleMap extends React.Component<GeoMapPropsInterface, GeoMapStateI
             position={{ lat: observer.position.latitude, lng: observer.position.longitude }}
             draggable={true}
             onDragEnd={this.onObserverDragEnd}
+            icon={ObserverIcon}
           />
         </If>
       </GoogleMap>

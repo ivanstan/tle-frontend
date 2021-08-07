@@ -7,6 +7,8 @@ import { formatDiff, fromAtom } from "../util/date"
 import { GeoMap } from "../components/GeoMap"
 import { Link, List, ListItem, ListItemText } from "@material-ui/core"
 import { If } from "react-if";
+import RoomIcon from '@material-ui/icons/Room';
+import Tooltip from '@material-ui/core/Tooltip';
 
 type RouteParams = {
   id: string
@@ -72,7 +74,7 @@ export class FlyOver extends React.Component<FlyOverPropsInterface, any> {
               mapElement={<div style={{ height: 400 }}/>}
             />
             <span style={{ fontSize: 12 }}>
-              * Drag marker to change your location
+              * Click on map or drag marker to change your location
             </span>
           </div>
         </div>
@@ -87,7 +89,7 @@ export class FlyOver extends React.Component<FlyOverPropsInterface, any> {
               longitude: {observer.position.longitude.toFixed(2)}° ]</h5>
           </div>
 
-          <List dense>
+          <List dense style={{overflowY: 'scroll', maxHeight: 'calc(100vh - 64px - 24px - 56px - 32px)'}}>
             {
               flyovers.member.map((element: any, index: number) => {
                 let aosTime = fromAtom(element.aos.date)
@@ -109,7 +111,9 @@ export class FlyOver extends React.Component<FlyOverPropsInterface, any> {
                       primary={'AOS ' + aosTime.toFormat('HH:mm:ss yyyy-MM-dd ZZ')}
                       secondary={formatDiff(diff)}
                     />
-                    {/*<Link href={mapLink}>View map</Link>*/}
+                    <Tooltip title="Show on map" placement='left'>
+                      <Link href={mapLink}><RoomIcon style={{fill: "#5BA473"}}/></Link>
+                    </Tooltip>
                   </ListItem>
                 )
               })
