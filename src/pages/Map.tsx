@@ -1,14 +1,30 @@
-import React from "react"
-import * as satellite from 'satellite.js'
-import { twoline2satrec } from 'satellite.js'
-import { fromAtom, toAtom } from "../util/date"
-import { GeoMap } from "../components/GeoMap"
-import Marker from "react-google-maps/lib/components/Marker"
-import { RouteComponentProps } from "react-router"
-import SatelliteMarker from "../components/icons/SatelliteMarker"
-import { TleApi } from "../services/TleApi"
-import { If } from "react-if"
-import Polyline from "react-google-maps/lib/components/Polyline"
+import React from 'react';
+import * as satellite from 'satellite.js';
+import { twoline2satrec } from 'satellite.js';
+import { fromAtom, toAtom } from '../util/date';
+import { GeoMap } from '../components/GeoMap';
+import Marker from 'react-google-maps/lib/components/Marker';
+import { RouteComponentProps } from 'react-router';
+import SatelliteMarker from '../components/icons/SatelliteMarker';
+import { TleApi } from '../services/TleApi';
+import { If } from 'react-if';
+import Polyline from 'react-google-maps/lib/components/Polyline';
+import {
+  Chip,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  Toolbar
+} from '@material-ui/core';
+import { DateTimePicker } from '@material-ui/pickers';
+import { DateTime } from 'luxon';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import { Input } from "@material-ui/icons";
+import SatelliteMultiSelect from "../components/SatelliteMultiSelect";
 
 interface MapPropsInterface extends RouteComponentProps {
 
@@ -16,19 +32,32 @@ interface MapPropsInterface extends RouteComponentProps {
 
 interface MapStateInterface {
   satellites: object[]
+  date: Date
+  params: any
 }
 
 export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
 
   state = {
+    date: DateTime.now().toJSDate(),
     params: new URLSearchParams(),
-    satellites: []
+    satellites: [],
   }
 
   public static getDerivedStateFromProps(props: Readonly<MapPropsInterface>, state: Readonly<MapStateInterface>) {
-    return {
-      params: new URLSearchParams(props.location.search)
+    const params = new URLSearchParams(props.location.search);
+
+    let date: any = toAtom(new Date());
+    let dateFromParam = params.get('date');
+
+    if (dateFromParam) {
+      date = dateFromParam.replace(' ', '+');
     }
+
+    return {
+      date: fromAtom(date).toJSDate(),
+      params: params,
+    };
   }
 
   shouldComponentUpdate(nextProps: Readonly<MapPropsInterface>, nextState: Readonly<MapStateInterface>, nextContext: any): boolean {
@@ -60,49 +89,97 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
     //   }
     // }
 
-    let date: any = toAtom(new Date());
-    let newDate = params.get('date');
-    if (newDate) {
-      date = newDate.replace(' ', '+');
-    }
+    const date = this.state.date;
 
-    date = fromAtom(date).toJSDate()
+    const requestParams = new URLSearchParams();
 
-    const requestParams = new URLSearchParams()
-    params.getAll('id[]').forEach(item => requestParams.append('satellite_id[]', item));
+    if (params.getAll('id[]').length > 0) {
+      params.getAll('id[]').forEach(item => requestParams.append('satellite_id[]', item));
 
-    let result2 = await fetch('https://tle.ivanstanojevic.me/api/tle?' + requestParams.toString())
-    let response2 = await result2.json()
+      let result2 = await fetch('https://tle.ivanstanojevic.me/api/tle?' + requestParams.toString());
+      let response2 = await result2.json();
 
-    const satellites: any = [];
-    response2.member.forEach((member: any) => {
-      const satrec = twoline2satrec(member.line1, member.line2)
-      const positionAndVelocity = satellite.propagate(satrec, date)
-      const positionEci: any = positionAndVelocity.position
-      const gmst = satellite.gstime(date)
+      const satellites: any = [];
+      response2.member.forEach((member: any) => {
+        const satrec = twoline2satrec(member.line1, member.line2);
+        const positionAndVelocity = satellite.propagate(satrec, date);
+        const positionEci: any = positionAndVelocity.position;
+        const gmst = satellite.gstime(date);
 
-      const positionGd = satellite.eciToGeodetic(positionEci, gmst)
+        const positionGd = satellite.eciToGeodetic(positionEci, gmst);
 
-      satellites.push({
-        groundTracks: TleApi.groundTracks(member, date),
-        marker: {
-          lat: positionGd.latitude * 180 / Math.PI,
-          lng: positionGd.longitude * 180 / Math.PI,
-        }
+        satellites.push({
+          groundTracks: TleApi.groundTracks(member, date),
+          marker: {
+            lat: positionGd.latitude * 180 / Math.PI,
+            lng: positionGd.longitude * 180 / Math.PI,
+          },
+        });
       });
-    });
 
-    this.setState({ satellites: satellites })
+      this.setState({ satellites: satellites });
+    }
   }
 
+  handleDateChange = (event: MaterialUiPickersDate) => {
+    if (event === null) {
+      return;
+    }
+
+    const { params } = this.state;
+
+    params.set('date', toAtom(event));
+
+    this.updateUrl(params);
+  };
+
+  updateUrl = (params: URLSearchParams) => {
+    const { history } = this.props;
+
+    history.push({
+      pathname: history.location.pathname,
+      search: decodeURIComponent(params.toString()),
+    });
+  };
+
   render() {
-    const { satellites, params } = this.state
+    const { satellites, params } = this.state;
 
     return (
-      <div>
+      <>
+        <Toolbar>
+          <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
+
+            {/*<SatelliteMultiSelect/>*/}
+
+            <div style={{flexGrow: 1}}/>
+
+            <DateTimePicker
+              style={{ minWidth: 280 }}
+              label={null}
+              format={'yyy-MM-dd hh:mm zzzz'}
+              inputVariant='standard'
+              value={this.state.date}
+              onChange={this.handleDateChange}
+              showTodayButton
+              size='medium'
+              todayLabel='Now'
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton>
+                      <AccessTimeIcon/>
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+          </div>
+        </Toolbar>
         <GeoMap
           zoom={2}
-          containerElement={<div style={{ height: window.innerHeight - 64, width: '100%' }}/>}
+          containerElement={<div style={{ height: window.innerHeight - (64 * 2), width: '100%' }}/>}
           mapElement={<div style={{ height: `100%` }}/>}
         >
           {satellites.map((satellite: any, index: number) => (
@@ -111,7 +188,7 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
                 <Polyline
                   path={satellite.groundTracks}
                   options={{
-                    strokeColor: "#74BD8C",
+                    strokeColor: '#74BD8C',
                     strokeOpacity: 0.75,
                     strokeWeight: 2,
                   }}
@@ -124,7 +201,7 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
             )
           )}
         </GeoMap>
-      </div>
+      </>
     )
   }
 }

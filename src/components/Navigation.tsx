@@ -1,6 +1,6 @@
 import React from 'react'
 import { HideOnScroll } from './HideOnScroll'
-import { AppBar, Button, Drawer, IconButton, Toolbar, Typography } from '@material-ui/core'
+import { AppBar, Button, Drawer, IconButton, Toolbar, Typography, withStyles } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu'
 import styled from 'styled-components'
 import { DonateButton } from "./DonateButton"
@@ -13,7 +13,13 @@ const Menu = styled.div`
   padding: 15px
 `
 
-export class Navigation extends React.Component<any, any> {
+const styles = (theme: any) => ({
+  label: {
+    color: '#f1f1f1',
+  },
+});
+
+class Navigation extends React.Component<any, any> {
 
   public readonly state = {
     open: false,
@@ -26,6 +32,8 @@ export class Navigation extends React.Component<any, any> {
   }
 
   render() {
+    const { classes } = this.props
+
     const menu = (
       <>
         <Button href={'#/'}>
@@ -89,7 +97,9 @@ export class Navigation extends React.Component<any, any> {
 
         </AppBar>
 
-       </HideOnScroll>
+      </HideOnScroll>
     )
   }
 }
+
+export default withStyles(styles)(Navigation)

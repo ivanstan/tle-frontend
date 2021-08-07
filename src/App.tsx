@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { Home } from "./pages/Home";
 import { Docs } from "./pages/Docs";
-import { Navigation } from "./components/Navigation";
+import Navigation from "./components/Navigation";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { Health } from "./pages/Health";
 import { Browse } from "./pages/Browse";
@@ -14,6 +14,8 @@ import { Provider } from 'mobx-react';
 import Observer from "./services/Observer";
 import FlyOverStore from "./services/FlyOverStore";
 import { GoogleAnalytics } from "./GoogleAnalytics";
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 const theme = createMuiTheme({
   palette: {
@@ -24,7 +26,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiButton: {
       label: {
-        color: "#f1f1f1",
+        color: "#0b3d91",
       },
     },
   },
@@ -38,6 +40,7 @@ function App() {
   return (
     <Sentry.ErrorBoundary fallback={"An error has occurred"}>
       <ThemeProvider theme={theme}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Provider observer={Observer} flyOverStore={FlyOverStore}>
           <Router>
             <Navigation/>
@@ -58,6 +61,7 @@ function App() {
             <Route path="/" component={GoogleAnalytics}/>
           </Router>
         </Provider>
+        </MuiPickersUtilsProvider>
       </ThemeProvider>
     </Sentry.ErrorBoundary>
   );
