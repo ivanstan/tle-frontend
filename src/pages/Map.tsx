@@ -15,6 +15,7 @@ import { DateTime } from 'luxon';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import TleMultiSelect from "../components/TleMultiSelect";
+import { getColor } from "../services/ColorPalette";
 
 interface MapPropsInterface extends RouteComponentProps {
 
@@ -92,7 +93,7 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
       let response2 = await result2.json();
 
       const satellites: any = [];
-      response2.member.forEach((member: any) => {
+      response2.member.forEach((member: any, index: number) => {
         const satrec = twoline2satrec(member.line1, member.line2);
         const positionAndVelocity = satellite.propagate(satrec, date);
         const positionEci: any = positionAndVelocity.position;
@@ -101,6 +102,7 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
         const positionGd = satellite.eciToGeodetic(positionEci, gmst);
 
         satellites.push({
+          color: getColor(index),
           tle: member,
           groundTracks: TleApi.groundTracks(member, date),
           marker: {
@@ -152,6 +154,9 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
   render() {
     const { satellites, params, data } = this.state;
 
+    const labelSize = { width: 220};
+    const labelPadding = 8;
+
     return (
       <>
         <Toolbar>
@@ -198,14 +203,18 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
                 <Polyline
                   path={satellite.groundTracks}
                   options={{
-                    strokeColor: '#74BD8C',
+                    strokeColor: satellite.color,
                     strokeOpacity: 0.75,
                     strokeWeight: 2,
                   }}
                 />
               </If>
               <If condition={satellite.marker}>
-                <Marker position={{ lat: satellite.marker.lat, lng: satellite.marker.lng }} icon={SatelliteMarker({color: '#5BA473'})}/>
+                <Marker
+                  position={{ lat: satellite.marker.lat, lng: satellite.marker.lng }}
+                  icon={SatelliteMarker({color: satellite.color})}
+                  label={satellite.tle.name}
+                />
               </If>
             </React.Fragment>
             )

@@ -19,6 +19,20 @@ export const styles = [
     ]
   },
   {
+    featureType: "administrative.country",
+    elementType: "labels",
+    stylers: [
+      { visibility: "off" }
+    ]
+  },
+  {
+    featureType: "administrative.province",
+    elementType: "labels",
+    stylers: [
+      { visibility: "off" }
+    ]
+  },
+  {
     "featureType": "transit",
     "stylers": [
       {
