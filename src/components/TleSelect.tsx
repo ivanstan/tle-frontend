@@ -42,9 +42,7 @@ export class TleSelect extends React.Component<any, any> {
     }
   }
 
-  public async query() {
-    const { inputValue } = this.state
-
+  public async query(inputValue: string = '') {
     this.provider.search(inputValue)
       .then((data: Tle[]) => {
         this.setState({ options: data, loading: false })
@@ -88,7 +86,7 @@ export class TleSelect extends React.Component<any, any> {
           {...params}
           value={inputValue}
           onChange={(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-            this.setState({ inputValue: event.target.value, loading: true }, this.query)
+            this.setState({ inputValue: event.target.value, loading: true }, () => this.query(event.target.value))
           }}
           label="Search satellites"
           variant="outlined"

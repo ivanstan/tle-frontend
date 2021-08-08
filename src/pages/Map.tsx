@@ -9,29 +9,20 @@ import SatelliteMarker from '../components/icons/SatelliteMarker';
 import { TleApi } from '../services/TleApi';
 import { If } from 'react-if';
 import Polyline from 'react-google-maps/lib/components/Polyline';
-import {
-  Chip,
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  Toolbar
-} from '@material-ui/core';
+import { IconButton, InputAdornment, Toolbar } from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
 import { DateTime } from 'luxon';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import { Input } from "@material-ui/icons";
-import SatelliteMultiSelect from "../components/SatelliteMultiSelect";
+import TleMultiSelect from "../components/TleMultiSelect";
 
 interface MapPropsInterface extends RouteComponentProps {
 
 }
 
 interface MapStateInterface {
-  satellites: object[]
+  satellites: any[]
+  data: any[]
   date: Date
   params: any
 }
@@ -42,6 +33,7 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
     date: DateTime.now().toJSDate(),
     params: new URLSearchParams(),
     satellites: [],
+    data: [],
   }
 
   public static getDerivedStateFromProps(props: Readonly<MapPropsInterface>, state: Readonly<MapStateInterface>) {
@@ -109,6 +101,7 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
         const positionGd = satellite.eciToGeodetic(positionEci, gmst);
 
         satellites.push({
+          tle: member,
           groundTracks: TleApi.groundTracks(member, date),
           marker: {
             lat: positionGd.latitude * 180 / Math.PI,
@@ -142,17 +135,24 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
     });
   };
 
+  onChange = (tle: any | null) => {
+
+  }
+
   render() {
-    const { satellites, params } = this.state;
+    const { satellites, params, data } = this.state;
 
     return (
       <>
         <Toolbar>
-          <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
+          <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
 
-            {/*<SatelliteMultiSelect/>*/}
+            {/*<TleMultiSelect*/}
+            {/*  onChange={this.onChange} */}
+            {/*  value={data}*/}
+            {/*/>*/}
 
-            <div style={{flexGrow: 1}}/>
+            <div style={{ flexGrow: 1 }}/>
 
             <DateTimePicker
               style={{ minWidth: 280 }}
