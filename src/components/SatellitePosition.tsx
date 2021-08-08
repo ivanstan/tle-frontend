@@ -32,7 +32,7 @@ export class SatellitePosition extends React.Component<any, any> {
         mapElement={<div style={{ height: `100%` }}/>}
       >
         <If condition={propagation}>
-          <Marker position={{ lat: propagation.geodetic.latitude, lng: propagation.geodetic.longitude }} icon={SatelliteMarker}/>
+          <Marker position={{ lat: propagation.geodetic.latitude, lng: propagation.geodetic.longitude }} icon={SatelliteMarker({color: '#5BA473'})}/>
         </If>
 
         <If condition={propagation.groundTracks}>

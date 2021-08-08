@@ -135,8 +135,18 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
     });
   };
 
-  onChange = (tle: any | null) => {
+  onChange = (satellites: any | null) => {
+    const { params } = this.state;
 
+    const objectParams: any = {};
+    params.forEach((item, index) => objectParams[index] = item)
+    console.log(objectParams)
+
+    params.delete('id[]');
+
+    satellites.forEach((satellite: any) => params.append('id[]', satellite.satelliteId))
+
+    this.updateUrl(params);
   }
 
   render() {
@@ -145,11 +155,11 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
     return (
       <>
         <Toolbar>
-          <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+          <div style={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center' }}>
 
             {/*<TleMultiSelect*/}
-            {/*  onChange={this.onChange} */}
-            {/*  value={data}*/}
+            {/*  onChange={this.onChange}*/}
+            {/*  value={satellites.map((satellite: any) => satellite.tle)}*/}
             {/*/>*/}
 
             <div style={{ flexGrow: 1 }}/>
@@ -195,7 +205,7 @@ export class Map extends React.Component<MapPropsInterface, MapStateInterface> {
                 />
               </If>
               <If condition={satellite.marker}>
-                <Marker position={{ lat: satellite.marker.lat, lng: satellite.marker.lng }} icon={SatelliteMarker}/>
+                <Marker position={{ lat: satellite.marker.lat, lng: satellite.marker.lng }} icon={SatelliteMarker({color: '#5BA473'})}/>
               </If>
             </React.Fragment>
             )

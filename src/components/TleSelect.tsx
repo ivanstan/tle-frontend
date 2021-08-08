@@ -3,6 +3,7 @@ import TextField from "@material-ui/core/TextField"
 import CircularProgress from "@material-ui/core/CircularProgress"
 import Autocomplete from "@material-ui/lab/Autocomplete"
 import { Tle, TleProvider } from "tle-client"
+import { Chip, Typography } from "@material-ui/core";
 
 export interface TleSelectPropsInterface {
   value: Tle | null
@@ -89,7 +90,7 @@ export class TleSelect extends React.Component<any, any> {
             this.setState({ inputValue: event.target.value, loading: true }, () => this.query(event.target.value))
           }}
           label="Search satellites"
-          variant="outlined"
+          variant="standard"
           InputProps={{
             ...params.InputProps,
             endAdornment: (
