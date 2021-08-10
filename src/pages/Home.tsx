@@ -12,7 +12,7 @@ import { SatellitePosition } from "../components/SatellitePosition"
 import AbstractTlePage, { AbstractTlePageStateInterface } from "./AbstractTlePage"
 import RoomIcon from "@material-ui/icons/Room";
 
-const styles = (theme: any) => ({
+const styles: any = (theme: any) => ({
   button: {
     height: 95, // setting height/width is optional
   },
@@ -34,7 +34,7 @@ const CustomButton = (props: any) => {
   return <Button
     onClick={onClick}
     classes={{ root: classes.button, label: classes.label }}
-    variant="raised"
+    // variant="raised"
     color="primary"
     disableRipple={true}
   >
@@ -126,7 +126,11 @@ class Home extends AbstractTlePage<any, HomeStateInterface> {
 
   public render() {
     const { data, popular, propagation } = this.state
-    const { classes, history } = this.props
+    const { history } = this.props
+
+    const classes: any = this.props;
+
+    console.log(classes)
 
     return (
       <div className="container" id="home-page">
@@ -165,10 +169,10 @@ class Home extends AbstractTlePage<any, HomeStateInterface> {
               <h2>{data.name}</h2>
 
               <div className={'d-flex justify-content-center'}>
-                <WrappedCustomButton onClick={()=> {history.push(`/map?id[]=${data.satelliteId}`)}}>
-                  <RoomIcon className={classes.icon}/>
-                  <Typography>Map</Typography>
-                </WrappedCustomButton>
+                {/*<WrappedCustomButton onClick={()=> {history.push(`/map?id[]=${data.satelliteId}`)}}>*/}
+                {/*  <RoomIcon className={classes.icon}/>*/}
+                {/*  <Typography>Map</Typography>*/}
+                {/*</WrappedCustomButton>*/}
 
                 <WrappedCustomButton onClick={()=> {history.push(`/tle/${data.satelliteId}/flyover`)}}>
                   <img src={'images/satellite.svg'} alt={''}/>
