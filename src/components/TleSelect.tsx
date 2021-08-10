@@ -3,7 +3,6 @@ import TextField from "@material-ui/core/TextField"
 import CircularProgress from "@material-ui/core/CircularProgress"
 import Autocomplete from "@material-ui/lab/Autocomplete"
 import { Tle, TleProvider } from "tle-client"
-import { Chip, Typography } from "@material-ui/core";
 
 export interface TleSelectPropsInterface {
   value: Tle | null

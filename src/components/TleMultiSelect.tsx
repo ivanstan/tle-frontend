@@ -2,16 +2,59 @@ import React, { ChangeEvent } from "react"
 import TextField from "@material-ui/core/TextField"
 import CircularProgress from "@material-ui/core/CircularProgress"
 import Autocomplete from "@material-ui/lab/Autocomplete"
-import { TleSelect } from "./TleSelect";
 import { Checkbox, Chip } from "@material-ui/core";
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { If } from "react-if";
+import { Tle, TleProvider } from "tle-client/index";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small"/>;
 const checkedIcon = <CheckBoxIcon fontSize="small"/>;
 
-export default class TleMultiSelect extends TleSelect {
+export interface TleSelectPropsInterface {
+  value: Tle[] | null
+  onChange: Function
+}
+
+export class TleMultiSelect extends React.Component<any, any> {
+
+  private provider: TleProvider
+
+  public readonly state = {
+    open: false,
+    loading: false,
+    options: [],
+    value: null,
+    inputValue: null,
+  }
+
+  constructor(props: any) {
+    super(props)
+
+    this.state.value = props.value
+    this.state.inputValue = props.value?.name
+
+    this.provider = new TleProvider()
+  }
+
+  static getDerivedStateFromProps(props: TleSelectPropsInterface, state: any) {
+
+    if (props.value === null) {
+      return null
+    }
+
+    return {
+      value: props.value,
+    }
+  }
+
+  public async query(inputValue: string = '') {
+    this.provider.search(inputValue)
+      .then((data: Tle[]) => {
+        this.setState({ options: data, loading: false })
+      })
+      .catch(() => this.setState({ options: [], loading: false }))
+  }
 
   render() {
     const { open, options, value, inputValue, loading } = this.state
@@ -19,11 +62,12 @@ export default class TleMultiSelect extends TleSelect {
 
     let width = (window.innerWidth < 500) ? 'auto' : 400
 
+    // @ts-ignore
     return (
       <Autocomplete
         size='small'
         multiple
-        value={value}
+        value={value || undefined}
         disableCloseOnSelect
         renderOption={(option, { selected }) => (
           <React.Fragment>

@@ -14,7 +14,6 @@ import { DateTimePicker } from '@material-ui/pickers';
 import { DateTime } from 'luxon';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import TleMultiSelect from "../components/TleMultiSelect";
 import { getColor } from "../services/ColorPalette";
 
 interface MapPropsInterface extends RouteComponentProps {

@@ -3,13 +3,46 @@ import { TleSelect } from "../components/TleSelect"
 import { Tle } from "tle-client"
 import { TleBrowser } from "../components/TleBrowser"
 import { TlePopularProvider } from "../services/TlePopularProvider"
-import { Button, Link, Typography } from "@material-ui/core"
+import { Button, Link, Typography, withStyles } from "@material-ui/core"
 import styled from "styled-components"
 import { device } from "../util/responsive"
 import Satellite from "../services/Satellite"
 import { If } from "react-if"
 import { SatellitePosition } from "../components/SatellitePosition"
 import AbstractTlePage, { AbstractTlePageStateInterface } from "./AbstractTlePage"
+import RoomIcon from "@material-ui/icons/Room";
+
+const styles = (theme: any) => ({
+  button: {
+    height: 95, // setting height/width is optional
+  },
+  label: {
+    // Aligns the content of the button vertically.
+    flexDirection: 'column'
+  },
+  icon: {
+    color: '#5ba473',
+    fontSize: '62px !important',
+    padding: 2,
+    marginBottom: theme.spacing.unit
+  }
+})
+
+const CustomButton = (props: any) => {
+  const { classes, onClick } = props;
+
+  return <Button
+    onClick={onClick}
+    classes={{ root: classes.button, label: classes.label }}
+    variant="raised"
+    color="primary"
+    disableRipple={true}
+  >
+    {props.children}
+  </Button>
+}
+
+const WrappedCustomButton = withStyles(styles)(CustomButton)
 
 interface HomeStateInterface extends AbstractTlePageStateInterface {
   popular: any[]
@@ -41,7 +74,7 @@ const CenterTitle = styled.p`
 
 const PopularItemWrapper = styled.div``
 
-export class Home extends AbstractTlePage<any, HomeStateInterface> {
+class Home extends AbstractTlePage<any, HomeStateInterface> {
 
   private popular: TlePopularProvider
 
@@ -93,6 +126,7 @@ export class Home extends AbstractTlePage<any, HomeStateInterface> {
 
   public render() {
     const { data, popular, propagation } = this.state
+    const { classes, history } = this.props
 
     return (
       <div className="container" id="home-page">
@@ -108,16 +142,8 @@ export class Home extends AbstractTlePage<any, HomeStateInterface> {
                 by&nbsp;<a href={"https://celestrak.com/"}
                            target="_blank"
                            rel="nofollow noreferrer">CelesTrak</a>&nbsp;and served in web application friendly JSON format.
-
                 A two-line element set (TLE) is a data format encoding of orbital elements of an Earth-orbiting
                 object for a given point in time.
-
-                {/*  Learn more about the <a*/}
-                {/*  href="https://spaceflight.nasa.gov/realdata/sightings/SSapplications/Post/JavaSSOP/SSOP_Help/tle_def.html"*/}
-                {/*  target="_blank"*/}
-                {/*  rel="nofollow"*/}
-                {/*>Definition of Two-line Element Set Coordinate System</a>.*/}
-
               </p>
 
               <CenterTitle>Recently popular satellites</CenterTitle>
@@ -138,14 +164,16 @@ export class Home extends AbstractTlePage<any, HomeStateInterface> {
             {data?.name && <div className="slide">
               <h2>{data.name}</h2>
 
-              <div className={'d-flex justify-center'}>
-                <Link href={`#/tle/${data.satelliteId}/flyover`} className={'my-4 mx-auto'}>
-                  <Button variant={'contained'}>
-                    <Typography color={'primary'}>
-                      {data.name} flyovers for your location
-                    </Typography>
-                  </Button>
-                </Link>
+              <div className={'d-flex justify-content-center'}>
+                <WrappedCustomButton onClick={()=> {history.push(`/map?id[]=${data.satelliteId}`)}}>
+                  <RoomIcon className={classes.icon}/>
+                  <Typography>Map</Typography>
+                </WrappedCustomButton>
+
+                <WrappedCustomButton onClick={()=> {history.push(`/tle/${data.satelliteId}/flyover`)}}>
+                  <img src={'images/satellite.svg'} alt={''}/>
+                  <Typography>Flyover</Typography>
+                </WrappedCustomButton>
               </div>
 
               <p className="pb-1">Latest two line element data for selected satellite</p>
@@ -163,3 +191,5 @@ export class Home extends AbstractTlePage<any, HomeStateInterface> {
     )
   }
 }
+
+export default withStyles(styles)(Home)
