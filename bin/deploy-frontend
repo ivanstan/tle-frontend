@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -e
+
+# Setup exported env
+export DEPLOY_PATH=/home/glutenfr/projects/tle.ivanstanojevic.me/shared/public
+export ARTIFACT_FILE=artifact-$(date '+%Y%m%d%H%M%S').tar.gz
+
+# Setup local env
+HOST=ivanstanojevic.me
+USER=glutenfr
+PORT=2233
+
+# Setup folders
+mkdir -p build
+mkdir -p .deploy
+
+# Custom commands
+yarn build prod
+
+# Create artifact
+tar -czf .deploy/"${ARTIFACT_FILE}" -C build .
+
+# Upload artifact
+scp -r -P ${PORT} .deploy/"${ARTIFACT_FILE}" ${USER}@${HOST}:/${DEPLOY_PATH}/
+
+# Deploy on server and run ./deploy-frontend-remote
+ssh ${USER}@${HOST} -p${PORT} 'bash -s' < ./bin/deploy-frontend-remote ${DEPLOY_PATH} ${ARTIFACT_FILE}
+
+rm -rf .deploy
+rm -rf build

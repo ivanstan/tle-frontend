@@ -51,7 +51,7 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "deploy": "sh scripts/deploy.sh"
+    "deploy": "sh bin/deploy-frontend"
   },
   "eslintConfig": {
     "extends": [
