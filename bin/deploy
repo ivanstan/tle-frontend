@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
 
-sh ./deploy-frontend.sh
+sh ./deploy-frontend
